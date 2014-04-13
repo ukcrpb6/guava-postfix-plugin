@@ -1,0 +1,28 @@
+<idea-plugin version="2">
+  <id>uk.co.drache.intellij.guavaPostfixCompletion</id>
+  <name>Guava Postfix Completion</name>
+  <version>1.0</version>
+  <vendor email="rob@drache.co.uk" url="https://github.com/ukcrpb6/guava-postfix-plugin">Drache</vendor>
+
+  <description><![CDATA[
+      Postfix completion templates for guava
+    ]]></description>
+
+  <change-notes><![CDATA[
+      Add template for guava checkNotNull(...)
+  ]]></change-notes>
+
+  <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+  <idea-version since-build="131"/>
+
+  <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+       on how to target different products -->
+  <!-- uncomment to enable plugin in all products -->
+  <depends>com.intellij.modules.lang</depends>
+  <depends>com.intellij.modules.java</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.CheckNotNullPostfixTemplate"/>
+  </extensions>
+
+</idea-plugin>
