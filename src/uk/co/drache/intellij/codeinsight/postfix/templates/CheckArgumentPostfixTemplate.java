@@ -5,10 +5,11 @@ import com.intellij.codeInsight.template.postfix.util.Aliases;
 import com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiExpression;
 
 import org.jetbrains.annotations.NotNull;
+
+import uk.co.drache.intellij.codeinsight.generation.surroundWith.JavaCheckArgumentSurrounder;
 
 /**
  * Add postfix completion for guava check argument.
@@ -24,13 +25,7 @@ public class CheckArgumentPostfixTemplate extends ExpressionPostfixTemplateWithC
 
   @Override
   protected void doIt(@NotNull Editor editor, @NotNull PsiExpression expr) {
-    if (!PostfixTemplatesUtils.isBoolean(expr.getType())) {
-      return;
-    }
-    TextRange range = GuavaPostfixTemplatesUtils.checkArgumentStatement(expr.getProject(), editor, expr);
-    if (range != null) {
-      editor.getCaretModel().moveToOffset(range.getStartOffset());
-    }
+    PostfixTemplatesUtils.apply(new JavaCheckArgumentSurrounder(), expr.getProject(), editor, expr);
   }
 
   @NotNull

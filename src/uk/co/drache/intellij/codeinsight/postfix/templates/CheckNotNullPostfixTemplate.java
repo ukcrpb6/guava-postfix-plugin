@@ -5,10 +5,11 @@ import com.intellij.codeInsight.template.postfix.util.Aliases;
 import com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiExpression;
 
 import org.jetbrains.annotations.NotNull;
+
+import uk.co.drache.intellij.codeinsight.generation.surroundWith.JavaCheckNotNullSurrounder;
 
 /**
  * Add postfix completion for guava checkNotNull.
@@ -24,14 +25,7 @@ public class CheckNotNullPostfixTemplate extends ExpressionPostfixTemplateWithCh
 
   @Override
   protected void doIt(@NotNull Editor editor, @NotNull PsiExpression expr) {
-    if (!PostfixTemplatesUtils.isNotPrimitiveTypeExpression(expr)) {
-      return;
-    }
-
-    TextRange range = GuavaPostfixTemplatesUtils.checkNotNullStatement(expr.getProject(), editor, expr);
-    if (range != null) {
-      editor.getCaretModel().moveToOffset(range.getStartOffset());
-    }
+    PostfixTemplatesUtils.apply(new JavaCheckNotNullSurrounder(), expr.getProject(), editor, expr);
   }
 
   @NotNull

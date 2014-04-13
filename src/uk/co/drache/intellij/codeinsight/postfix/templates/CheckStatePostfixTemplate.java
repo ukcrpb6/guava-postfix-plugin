@@ -5,10 +5,11 @@ import com.intellij.codeInsight.template.postfix.util.Aliases;
 import com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiExpression;
 
 import org.jetbrains.annotations.NotNull;
+
+import uk.co.drache.intellij.codeinsight.generation.surroundWith.JavaCheckStateSurrounder;
 
 /**
  * Add postfix completion for guava check argument.
@@ -24,13 +25,7 @@ public class CheckStatePostfixTemplate extends ExpressionPostfixTemplateWithChoo
 
   @Override
   protected void doIt(@NotNull Editor editor, @NotNull PsiExpression expr) {
-    if (!PostfixTemplatesUtils.isBoolean(expr.getType())) {
-      return;
-    }
-    TextRange range = GuavaPostfixTemplatesUtils.checkStateStatement(expr.getProject(), editor, expr);
-    if (range != null) {
-      editor.getCaretModel().moveToOffset(range.getStartOffset());
-    }
+    PostfixTemplatesUtils.apply(new JavaCheckStateSurrounder(), expr.getProject(), editor, expr);
   }
 
   @NotNull

@@ -1,4 +1,4 @@
-package uk.co.drache.intellij.codeinsight.postfix.templates;
+package uk.co.drache.intellij.codeinsight.generation.surroundWith;
 
 import com.intellij.codeInsight.generation.surroundWith.JavaExpressionSurrounder;
 import com.intellij.openapi.editor.Editor;
@@ -18,18 +18,14 @@ import com.siyeh.ig.psiutils.ImportUtils;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * @author Bob Browning
  */
 public abstract class JavaCheckBaseSurrounder extends JavaExpressionSurrounder {
 
   @NonNls
-  private static final String EXPANSION_EXPRESSION = "checkArgument(expr)";
-
-  @NonNls
   private static final String GUAVA_PRECONDITIONS = "com.google.common.base.Preconditions";
+
   private final String methodName;
 
   protected JavaCheckBaseSurrounder(@NotNull String methodName) {

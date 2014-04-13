@@ -10,16 +10,17 @@
       <b>Available templates:</b><br/><br/>
 
       <ul>
-        <li> <b>.checkargument</b> - <b>.ca</b> – checks that the boolean is true – <b>checkArgument(expr)</b></li>
-        <li> <b>.checknotnull</b> - <b>.cnn</b> – checks that the value is not null – <b>checkNotNull(expr)</b></li>
-        <li> <b>.checkstate</b> - <b>.cs</b> – checks some state of the object, not dependent on the method arguments – <b>checkState(expr)</b></li>
+        <li> <b>.checkargument</b> - <b>.ca</b> – Checks that the boolean is true – <b>checkArgument(expr)</b></li>
+        <li> <b>.checknotnull</b> - <b>.cnn</b> – Checks that the value is not null – <b>checkNotNull(expr)</b></li>
+        <li> <b>.checkstate</b> - <b>.cs</b> – Checks some state of the object, not dependent on the method arguments – <b>checkState(expr)</b></li>
+        <li> <b>.checkelementindex</b> - <b>.cei</b> – Checks that index is a valid element index into a list, string, or array with the specified size – <b>checkElementIndex(index, size)</b></li>
+        <li> <b>.checkpositionindex</b> - <b>.cpi</b> – Checks that index is a valid position index into a list, string, or array with the specified size  – <b>checkPositionIndex(index, size)</b></li>
+        <li> <b>.checkpositionindexes</b> - <b>.cpis</b> – Checks that [start, end) is a valid sub range of a list, string, or array with the specified size – <b>checkPositionIndexes(start, end, size)</b></li>
       </ul>
     ]]></description>
 
   <change-notes><![CDATA[
-      Add template for guava checkNotNull(...)
-      Add template for guava checkArgument(...)
-      Add template for guava CheckState(...)
+      * Initial release
   ]]></change-notes>
 
   <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
@@ -35,6 +36,9 @@
     <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.CheckArgumentPostfixTemplate"/>
     <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.CheckNotNullPostfixTemplate"/>
     <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.CheckStatePostfixTemplate"/>
+    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.CheckElementIndexPostfixTemplate"/>
+    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.CheckPositionIndexPostfixTemplate"/>
+    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.CheckPositionIndexesPostfixTemplate"/>
   </extensions>
 
 </idea-plugin>

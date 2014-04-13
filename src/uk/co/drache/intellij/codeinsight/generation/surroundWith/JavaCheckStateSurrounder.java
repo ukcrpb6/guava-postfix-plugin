@@ -1,4 +1,4 @@
-package uk.co.drache.intellij.codeinsight.postfix.templates;
+package uk.co.drache.intellij.codeinsight.generation.surroundWith;
 
 import com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils;
 import com.intellij.psi.PsiExpression;
