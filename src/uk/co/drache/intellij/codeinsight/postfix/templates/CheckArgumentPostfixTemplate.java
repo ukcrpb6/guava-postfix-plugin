@@ -11,24 +11,23 @@ import com.intellij.psi.PsiExpression;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Add postfix completion for guava checkNotNull.
+ * Add postfix completion for guava check argument.
  *
  * @author Bob Browning
  */
-@Aliases(value = ".cnn")
-public class CheckNotNullPostfixTemplate extends ExpressionPostfixTemplateWithChooser {
+@Aliases(value = ".ca")
+public class CheckArgumentPostfixTemplate extends ExpressionPostfixTemplateWithChooser {
 
-  protected CheckNotNullPostfixTemplate() {
-    super("checknotnull", "Checks that the value is not null", "checkNotNull(expr)");
+  protected CheckArgumentPostfixTemplate() {
+    super("checkargument", "Checks that the boolean is true", "checkArgument(expr)");
   }
 
   @Override
   protected void doIt(@NotNull Editor editor, @NotNull PsiExpression expr) {
-    if (!PostfixTemplatesUtils.isNotPrimitiveTypeExpression(expr)) {
+    if (!PostfixTemplatesUtils.isBoolean(expr.getType())) {
       return;
     }
-
-    TextRange range = GuavaPostfixTemplatesUtils.checkNotNullStatement(expr.getProject(), editor, expr);
+    TextRange range = GuavaPostfixTemplatesUtils.checkArgumentStatement(expr.getProject(), editor, expr);
     if (range != null) {
       editor.getCaretModel().moveToOffset(range.getStartOffset());
     }
@@ -40,7 +39,7 @@ public class CheckNotNullPostfixTemplate extends ExpressionPostfixTemplateWithCh
     return new Condition<PsiExpression>() {
       @Override
       public boolean value(PsiExpression expr) {
-        return PostfixTemplatesUtils.isNotPrimitiveTypeExpression(expr);
+        return PostfixTemplatesUtils.isBoolean(expr.getType());
       }
     };
   }
