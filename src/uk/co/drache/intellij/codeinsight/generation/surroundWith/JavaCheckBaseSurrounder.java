@@ -13,18 +13,16 @@ import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.util.IncorrectOperationException;
-import com.siyeh.ig.psiutils.ImportUtils;
 
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.GUAVA_PRECONDITIONS;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.ImportUtils.addStaticImport;
 
 /**
  * @author Bob Browning
  */
 public abstract class JavaCheckBaseSurrounder extends JavaExpressionSurrounder {
-
-  @NonNls
-  private static final String GUAVA_PRECONDITIONS = "com.google.common.base.Preconditions";
 
   private final String methodName;
 
@@ -39,10 +37,11 @@ public abstract class JavaCheckBaseSurrounder extends JavaExpressionSurrounder {
     PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
     CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
 
-    ImportUtils.addStaticImport(GUAVA_PRECONDITIONS, methodName, expr);
+    boolean withImport = addStaticImport(GUAVA_PRECONDITIONS, methodName, expr);
 
+    String newExpression = (withImport ? "" : GUAVA_PRECONDITIONS + ".") + getExpansionExpression();
     PsiMethodCallExpression checkStatement = (PsiMethodCallExpression)
-        ((PsiExpressionStatement) factory.createStatementFromText(getExpansionExpression(), null)).getExpression();
+        ((PsiExpressionStatement) factory.createStatementFromText(newExpression, null)).getExpression();
 
     checkStatement = (PsiMethodCallExpression) codeStyleManager.reformat(checkStatement);
     checkStatement.getArgumentList().getExpressions()[0].replace(expr);
