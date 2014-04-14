@@ -1,5 +1,7 @@
 package uk.co.drache.intellij.codeinsight.postfix.utils;
 
+import com.google.common.base.Splitter;
+
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplate;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.CommonClassNames;
@@ -26,9 +28,23 @@ public class GuavaPostfixTemplatesUtils {
   @NonNls
   public static final String GUAVA_PRECONDITIONS = "com.google.common.base.Preconditions";
 
+  @NonNls
+  private static final String JAVA_LANG_CHAR_SEQUENCE = "java.lang.CharSequence";
+
   @Contract("null -> false")
   public static boolean isCollection(@Nullable PsiType type) {
     return type != null && InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_UTIL_COLLECTION);
+  }
+
+  @Contract("null -> false")
+  public static boolean isIterator(@Nullable PsiType type) {
+    return type != null && InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_UTIL_ITERATOR);
+  }
+
+
+  @Contract("null -> false")
+  public static boolean isCharSequence(@Nullable PsiType type) {
+    return type != null && InheritanceUtil.isInheritor(type, JAVA_LANG_CHAR_SEQUENCE);
   }
 
   public static void createStatement(@NotNull PsiElement context,

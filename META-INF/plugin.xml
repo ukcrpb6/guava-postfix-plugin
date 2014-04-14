@@ -17,6 +17,11 @@
         <li> <b>.checkpositionindex</b> - <b>.cpi</b> – Checks that index is a valid position index into a list, string, or array with the specified size  – <b>checkPositionIndex(index, size)</b></li>
         <li> <b>.checkpositionindexes</b> - <b>.cpis</b> – Checks that [start, end) is a valid sub range of a list, string, or array with the specified size – <b>checkPositionIndexes(start, end, size)</b></li>
       </ul>
+
+      <ul>
+        <li> <b>.join</b> - Joins pieces of text (specified as an array, Iterable, varargs or even a Map) with a separator – <b>Joiner.on(',').join(iterable)</b></li>
+        <li> <b>.split</b> - Extracts non-overlapping substrings from an input string, typically by recognizing appearances of a separator sequence – <b>Splitter.on(',').split(charsequence)</b></li>
+      </ul>
     ]]></description>
 
   <change-notes><![CDATA[
@@ -39,6 +44,8 @@
     <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.CheckElementIndexPostfixTemplate"/>
     <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.CheckPositionIndexPostfixTemplate"/>
     <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.CheckPositionIndexesPostfixTemplate"/>
+    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.SplitterPostfixTemplate"/>
+    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.JoinerPostfixTemplate"/>
   </extensions>
 
 </idea-plugin>
