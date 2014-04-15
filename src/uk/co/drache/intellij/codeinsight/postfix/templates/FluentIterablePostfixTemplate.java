@@ -1,37 +1,42 @@
 package uk.co.drache.intellij.codeinsight.postfix.templates;
 
+import com.google.common.collect.FluentIterable;
+
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateManager;
-import com.intellij.codeInsight.template.impl.TextExpression;
 import com.intellij.codeInsight.template.postfix.templates.ExpressionPostfixTemplateWithChooser;
+import com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiExpressionStatement;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-import static com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils.isArray;
-import static com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils.isIterable;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.isIterator;
-
 /**
  * @author Bob Browning
  */
-public class JoinerPostfixTemplate extends ExpressionPostfixTemplateWithChooser {
+public class FluentIterablePostfixTemplate extends ExpressionPostfixTemplateWithChooser {
 
   @NonNls
-  private static final String DESCRIPTION = "Joins pieces of text (specified as an array, Iterable, varargs or even a Map) with a separator";
+  private static final String FLUENT_ITERABLE_CLASS = "com.google.common.collect.FluentIterable";
 
   @NonNls
-  private static final String EXAMPLE = "Joiner.on(',').join(array)";
+  private static final String FLUENT_ITERABLE_FACTORY_METHOD = "from";
 
   @NonNls
-  private static final String POSTFIX_COMMAND = "join";
+  private static final String POSTFIX_COMMAND = "fluentIterable";
 
-  public JoinerPostfixTemplate() {
+  @NonNls
+  private static final String DESCRIPTION = "";
+
+  @NonNls
+  private static final String EXAMPLE = "FluentIterable.from(iterable)";
+
+  public FluentIterablePostfixTemplate() {
     super(POSTFIX_COMMAND, DESCRIPTION, EXAMPLE);
   }
 
@@ -48,11 +53,8 @@ public class JoinerPostfixTemplate extends ExpressionPostfixTemplateWithChooser 
     template.setToShortenLongNames(true);
     template.setToReformat(true);
 
-    template.addTextSegment("com.google.common.base.Joiner.on");
+    template.addTextSegment(FLUENT_ITERABLE_CLASS + "." + FLUENT_ITERABLE_FACTORY_METHOD);
     template.addTextSegment("(");
-    template.addVariable("separator", new TextExpression("','"), true);
-    template.addTextSegment(")");
-    template.addTextSegment(".join(");
     template.addTextSegment(expr.getText());
     template.addTextSegment(")");
     template.addEndVariable();
@@ -66,9 +68,7 @@ public class JoinerPostfixTemplate extends ExpressionPostfixTemplateWithChooser 
     return new Condition<PsiExpression>() {
       @Override
       public boolean value(PsiExpression expr) {
-        return expr != null && (isIterator(expr.getType()) ||
-                                isArray(expr.getType()) ||
-                                isIterable(expr.getType()));
+        return expr != null && PostfixTemplatesUtils.isIterable(expr.getType());
       }
     };
   }

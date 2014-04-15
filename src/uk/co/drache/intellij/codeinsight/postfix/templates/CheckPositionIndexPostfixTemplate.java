@@ -4,7 +4,6 @@ import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.codeInsight.template.impl.TextExpression;
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplate;
-import com.intellij.codeInsight.template.postfix.util.Aliases;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -17,6 +16,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static com.google.common.base.Preconditions.checkPositionIndex;
 import static com.intellij.codeInsight.template.Template.Property.USE_STATIC_IMPORT_IF_POSSIBLE;
 import static com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils.isArray;
 import static com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils.isIterable;
@@ -27,7 +27,6 @@ import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTempla
 /**
  * @author Bob Browning
  */
-@Aliases(".cpi")
 public class CheckPositionIndexPostfixTemplate extends PostfixTemplate {
 
   @NonNls
@@ -35,7 +34,7 @@ public class CheckPositionIndexPostfixTemplate extends PostfixTemplate {
       "com.google.common.base.Preconditions.checkPositionIndex";
 
   public CheckPositionIndexPostfixTemplate() {
-    super("checkpositionindex",
+    super("checkPositionIndex",
           "Checks that index is a valid position index into a list, string, or array with the specified size.",
           "checkPositionIndex(index, size)");
   }
@@ -79,7 +78,7 @@ public class CheckPositionIndexPostfixTemplate extends PostfixTemplate {
     template.addVariable("index", new TextExpression(bounds.first), true);
     template.addTextSegment(", ");
     template.addTextSegment(bounds.second);
-    template.addTextSegment(");");
+    template.addTextSegment(")");
     template.addEndVariable();
 
     manager.startTemplate(editor, template);

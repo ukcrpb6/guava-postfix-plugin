@@ -4,7 +4,6 @@ import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.codeInsight.template.impl.TextExpression;
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplate;
-import com.intellij.codeInsight.template.postfix.util.Aliases;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -17,6 +16,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static com.google.common.base.Preconditions.checkElementIndex;
 import static com.intellij.codeInsight.template.Template.Property.USE_STATIC_IMPORT_IF_POSSIBLE;
 import static com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils.isArray;
 import static com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils.isIterable;
@@ -27,17 +27,24 @@ import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTempla
 /**
  * @author Bob Browning
  */
-@Aliases(".cei")
 public class CheckElementIndexPostfixTemplate extends PostfixTemplate {
 
   @NonNls
   private static final String
       GUAVA_CHECK_ELEMENT_INDEX_METHOD = "com.google.common.base.Preconditions.checkElementIndex";
 
+  @NonNls
+  private static final String POSTFIX_COMMAND = "checkElementIndex";
+
+  @NonNls
+  private static final String DESCRIPTION =
+      "Checks that index is a valid element index into a list, string, or array with the specified size";
+
+  @NonNls
+  private static final String EXAMPLE = "Preconditions.checkElementIndex(index, size)";
+
   public CheckElementIndexPostfixTemplate() {
-    super("checkelementindex",
-          "Checks that index is a valid element index into a list, string, or array with the specified size",
-          "checkElementIndex(index, size)");
+    super(POSTFIX_COMMAND, DESCRIPTION, EXAMPLE);
   }
 
   @Override
@@ -79,7 +86,7 @@ public class CheckElementIndexPostfixTemplate extends PostfixTemplate {
     template.addVariable("index", new TextExpression(bounds.first), true);
     template.addTextSegment(", ");
     template.addTextSegment(bounds.second);
-    template.addTextSegment(");");
+    template.addTextSegment(")");
     template.addEndVariable();
 
     manager.startTemplate(editor, template);

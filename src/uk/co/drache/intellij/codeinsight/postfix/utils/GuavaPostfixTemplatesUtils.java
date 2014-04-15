@@ -1,14 +1,14 @@
 package uk.co.drache.intellij.codeinsight.postfix.utils;
 
-import com.google.common.base.Splitter;
-
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplate;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiArrayType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiStatement;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.InheritanceUtil;
@@ -45,6 +45,12 @@ public class GuavaPostfixTemplatesUtils {
   @Contract("null -> false")
   public static boolean isCharSequence(@Nullable PsiType type) {
     return type != null && InheritanceUtil.isInheritor(type, JAVA_LANG_CHAR_SEQUENCE);
+  }
+
+  @Contract("null -> false")
+  public static boolean isObjectArrayTypeExpression(@Nullable PsiType type) {
+    return type instanceof PsiArrayType &&
+           !(((PsiArrayType) type).getComponentType() instanceof PsiPrimitiveType);
   }
 
   public static void createStatement(@NotNull PsiElement context,

@@ -13,14 +13,21 @@
         <li> <b>.checkargument</b> - <b>.ca</b> – Checks that the boolean is true – <b>checkArgument(expr)</b></li>
         <li> <b>.checknotnull</b> - <b>.cnn</b> – Checks that the value is not null – <b>checkNotNull(expr)</b></li>
         <li> <b>.checkstate</b> - <b>.cs</b> – Checks some state of the object, not dependent on the method arguments – <b>checkState(expr)</b></li>
-        <li> <b>.checkelementindex</b> - <b>.cei</b> – Checks that index is a valid element index into a list, string, or array with the specified size – <b>checkElementIndex(index, size)</b></li>
-        <li> <b>.checkpositionindex</b> - <b>.cpi</b> – Checks that index is a valid position index into a list, string, or array with the specified size  – <b>checkPositionIndex(index, size)</b></li>
-        <li> <b>.checkpositionindexes</b> - <b>.cpis</b> – Checks that [start, end) is a valid sub range of a list, string, or array with the specified size – <b>checkPositionIndexes(start, end, size)</b></li>
+        <li> <b>.checkelementindex</b> – Checks that index is a valid element index into a list, string, or array with the specified size – <b>checkElementIndex(index, size)</b></li>
+        <li> <b>.checkpositionindex</b> – Checks that index is a valid position index into a list, string, or array with the specified size  – <b>checkPositionIndex(index, size)</b></li>
+        <li> <b>.checkpositionindexes</b> – Checks that [start, end) is a valid sub range of a list, string, or array with the specified size – <b>checkPositionIndexes(start, end, size)</b></li>
       </ul>
 
       <ul>
         <li> <b>.join</b> - Joins pieces of text (specified as an array, Iterable, varargs or even a Map) with a separator – <b>Joiner.on(',').join(iterable)</b></li>
         <li> <b>.split</b> - Extracts non-overlapping substrings from an input string, typically by recognizing appearances of a separator sequence – <b>Splitter.on(',').split(charsequence)</b></li>
+      </ul>
+
+      <ul>
+        <li> <b>.immutableListCopyOf</b> - Creates an immutable list containing the given elements, in order – <b>ImmutableList.copyOf(Array|Collection|Iterator|Iterable)</b></li>
+        <li> <b>.immutableListOf</b> -  Creates an immutable list containing a single element – <b>ImmutableList.of(Object)</b></li>
+        <li> <b>.immutableSetCopyOf</b> - Creates an immutable set containing the given elements, in order – <b>ImmutableSet.copyOf(Array|Collection|Iterator|Iterable)</b></li>
+        <li> <b>.immutableSetOf</b> - Creates an immutable set containing a single element – <b>ImmutableSet.of(Object)</b></li>
       </ul>
     ]]></description>
 
@@ -46,6 +53,12 @@
     <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.CheckPositionIndexesPostfixTemplate"/>
     <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.SplitterPostfixTemplate"/>
     <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.JoinerPostfixTemplate"/>
+    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.ImmutableListCopyOfPostfixTemplate"/>
+    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.ImmutableListOfPostfixTemplate"/>
+    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.ImmutableSetCopyOfPostfixTemplate"/>
+    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.ImmutableSetOfPostfixTemplate"/>
+    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.FluentIterablePostfixTemplate"/>
+    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.TypeTokenPostfixTemplate"/>
   </extensions>
 
 </idea-plugin>

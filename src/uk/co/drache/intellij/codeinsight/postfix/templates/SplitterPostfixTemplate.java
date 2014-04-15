@@ -21,7 +21,7 @@ import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtil
 public class SplitterPostfixTemplate extends ExpressionPostfixTemplateWithChooser {
 
   @NonNls
-  public static final String DESCRIPTION = "Extracts non-overlapping substrings from an input string, typically by recognizing appearances of a separator sequence";
+  private static final String DESCRIPTION = "Extracts non-overlapping substrings from an input string, typically by recognizing appearances of a separator sequence";
 
   @NonNls
   private static final String EXAMPLE = "Splitter.on(',').split(charsequence)";

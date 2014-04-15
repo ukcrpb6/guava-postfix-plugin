@@ -2,45 +2,37 @@ package uk.co.drache.intellij.codeinsight.postfix.templates;
 
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateManager;
-import com.intellij.codeInsight.template.impl.TextExpression;
 import com.intellij.codeInsight.template.postfix.templates.ExpressionPostfixTemplateWithChooser;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
+import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiExpressionStatement;
+import com.intellij.psi.util.InheritanceUtil;
 
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-
-import static com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils.isArray;
-import static com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils.isIterable;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.isIterator;
 
 /**
  * @author Bob Browning
  */
-public class JoinerPostfixTemplate extends ExpressionPostfixTemplateWithChooser {
+public abstract class ImmutableBaseOfPostfixTemplate extends ExpressionPostfixTemplateWithChooser {
 
-  @NonNls
-  private static final String DESCRIPTION = "Joins pieces of text (specified as an array, Iterable, varargs or even a Map) with a separator";
-
-  @NonNls
-  private static final String EXAMPLE = "Joiner.on(',').join(array)";
-
-  @NonNls
-  private static final String POSTFIX_COMMAND = "join";
-
-  public JoinerPostfixTemplate() {
-    super(POSTFIX_COMMAND, DESCRIPTION, EXAMPLE);
+  protected ImmutableBaseOfPostfixTemplate(@NotNull String name,
+                                           @NotNull String description,
+                                           @NotNull String example) {
+    super(name, description, example);
   }
+
+  protected abstract String getImmutableCollectionImplType();
 
   @Override
   protected void doIt(@NotNull Editor editor, @NotNull PsiExpression expr) {
     Project project = expr.getProject();
     Document document = editor.getDocument();
-
     document.deleteString(expr.getTextRange().getStartOffset(), expr.getTextRange().getEndOffset());
+
     TemplateManager manager = TemplateManager.getInstance(project);
 
     Template template = manager.createTemplate("", "");
@@ -48,11 +40,8 @@ public class JoinerPostfixTemplate extends ExpressionPostfixTemplateWithChooser 
     template.setToShortenLongNames(true);
     template.setToReformat(true);
 
-    template.addTextSegment("com.google.common.base.Joiner.on");
+    template.addTextSegment(getImmutableCollectionImplType() + ".of");
     template.addTextSegment("(");
-    template.addVariable("separator", new TextExpression("','"), true);
-    template.addTextSegment(")");
-    template.addTextSegment(".join(");
     template.addTextSegment(expr.getText());
     template.addTextSegment(")");
     template.addEndVariable();
@@ -66,9 +55,8 @@ public class JoinerPostfixTemplate extends ExpressionPostfixTemplateWithChooser 
     return new Condition<PsiExpression>() {
       @Override
       public boolean value(PsiExpression expr) {
-        return expr != null && (isIterator(expr.getType()) ||
-                                isArray(expr.getType()) ||
-                                isIterable(expr.getType()));
+        return expr != null
+               && InheritanceUtil.isInheritor(expr.getType(), CommonClassNames.JAVA_LANG_OBJECT);
       }
     };
   }

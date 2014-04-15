@@ -4,7 +4,6 @@ import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.codeInsight.template.impl.TextExpression;
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplate;
-import com.intellij.codeInsight.template.postfix.util.Aliases;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -27,17 +26,24 @@ import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTempla
 /**
  * @author Bob Browning
  */
-@Aliases(".cpis")
 public class CheckPositionIndexesPostfixTemplate extends PostfixTemplate {
 
   @NonNls
   private static final String GUAVA_CHECK_POSITION_INDEXES_METHOD =
       "com.google.common.base.Preconditions.checkPositionIndexes";
 
+  @NonNls
+  private static final String POSTFIX_COMMAND = "checkPositionIndexes";
+
+  @NonNls
+  private static final String DESCRIPTION =
+      "Checks that [start, end) is a valid sub range of a list, string, or array with the specified size.";
+
+  @NonNls
+  private static final String EXAMPLE = "Preconditions.checkPositionIndexes(start, end, size)";
+
   public CheckPositionIndexesPostfixTemplate() {
-    super("checkpositionindexes",
-          "Checks that [start, end) is a valid sub range of a list, string, or array with the specified size.",
-          "checkPositionIndexes(start, end, size)");
+    super(POSTFIX_COMMAND, DESCRIPTION, EXAMPLE);
   }
 
   @Override

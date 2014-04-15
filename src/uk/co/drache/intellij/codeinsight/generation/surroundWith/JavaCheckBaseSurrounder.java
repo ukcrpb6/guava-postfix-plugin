@@ -16,6 +16,7 @@ import com.intellij.util.IncorrectOperationException;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.intellij.codeInsight.template.postfix.templates.PostfixTemplate.getTopmostExpression;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.GUAVA_PRECONDITIONS;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.ImportUtils.addStaticImport;
 
@@ -39,7 +40,8 @@ public abstract class JavaCheckBaseSurrounder extends JavaExpressionSurrounder {
 
     boolean withImport = addStaticImport(GUAVA_PRECONDITIONS, methodName, expr);
 
-    String newExpression = (withImport ? "" : GUAVA_PRECONDITIONS + ".") + getExpansionExpression();
+    String newExpression = (withImport ? "" : GUAVA_PRECONDITIONS + ".") + getExpansionExpression()
+                           + ((expr == getTopmostExpression(expr)) ? ";" : "");
     PsiMethodCallExpression checkStatement = (PsiMethodCallExpression)
         ((PsiExpressionStatement) factory.createStatementFromText(newExpression, null)).getExpression();
 
