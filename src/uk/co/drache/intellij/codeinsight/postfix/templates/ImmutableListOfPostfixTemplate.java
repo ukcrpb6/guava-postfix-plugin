@@ -2,7 +2,11 @@ package uk.co.drache.intellij.codeinsight.postfix.templates;
 
 import org.jetbrains.annotations.NonNls;
 
+import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassNames;
+
 /**
+ * Postfix template for guava {@link com.google.common.collect.ImmutableList#of(Object)}.
+ *
  * @author Bob Browning
  */
 public class ImmutableListOfPostfixTemplate extends ImmutableBaseOfPostfixTemplate {
@@ -11,7 +15,7 @@ public class ImmutableListOfPostfixTemplate extends ImmutableBaseOfPostfixTempla
   private static final String DESCRIPTION = "Wraps as an immutable list singleton";
 
   @NonNls
-  private static final String EXAMPLE = "ImmutableList.of(Object)";
+  private static final String EXAMPLE = "ImmutableList.of(element)";
 
   @NonNls
   private static final String POSTFIX_COMMAND = "immutableListOf";
@@ -22,7 +26,7 @@ public class ImmutableListOfPostfixTemplate extends ImmutableBaseOfPostfixTempla
 
   @Override
   protected String getImmutableCollectionImplType() {
-    return "com.google.common.collect.ImmutableList";
+    return GuavaClassNames.IMMUTABLE_LIST;
   }
 
 }

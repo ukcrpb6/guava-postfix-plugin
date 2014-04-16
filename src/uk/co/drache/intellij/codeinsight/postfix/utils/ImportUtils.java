@@ -8,10 +8,19 @@ import com.intellij.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.PsiJavaFile;
 
 /**
+ * Collection of method for supporting importing of members.
+ *
  * @author Bob Browning
  */
 public class ImportUtils {
 
+  /**
+   * Check whether the current class has the specified static import.
+   *
+   * @param qualifierClass The class to import from
+   * @param memberName     The class member to import
+   * @param context        The context to be imported into
+   */
   public static boolean hasExactImportStatic(String qualifierClass, String memberName, PsiElement context) {
     final PsiFile file = context.getContainingFile();
     if (!(file instanceof PsiJavaFile)) {

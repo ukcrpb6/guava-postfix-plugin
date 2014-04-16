@@ -13,18 +13,22 @@ import com.intellij.psi.PsiExpression;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
+import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassNames;
 import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils;
 
 /**
+ * Postfix template for guava {@link com.google.common.base.Splitter}.
+ *
  * @author Bob Browning
  */
 public class SplitterPostfixTemplate extends ExpressionPostfixTemplateWithChooser {
 
   @NonNls
-  private static final String DESCRIPTION = "Extracts non-overlapping substrings from an input string, typically by recognizing appearances of a separator sequence";
+  private static final String DESCRIPTION = "Extracts non-overlapping substrings from an input string, "
+                                            + "typically by recognizing appearances of a separator sequence";
 
   @NonNls
-  private static final String EXAMPLE = "Splitter.on(',').split(charsequence)";
+  private static final String EXAMPLE = "Splitter.on(',').split(sequence)";
 
   @NonNls
   private static final String POSTFIX_COMMAND = "split";
@@ -46,11 +50,9 @@ public class SplitterPostfixTemplate extends ExpressionPostfixTemplateWithChoose
     template.setToShortenLongNames(true);
     template.setToReformat(true);
 
-    template.addTextSegment("com.google.common.base.Splitter.on");
-    template.addTextSegment("(");
+    template.addTextSegment(GuavaClassNames.SPLITTER + ".on(");
     template.addVariable("separator", new TextExpression("','"), true);
-    template.addTextSegment(")");
-    template.addTextSegment(".split(");
+    template.addTextSegment(").split(");
     template.addTextSegment(expr.getText());
     template.addTextSegment(")");
     template.addEndVariable();
@@ -68,4 +70,5 @@ public class SplitterPostfixTemplate extends ExpressionPostfixTemplateWithChoose
       }
     };
   }
+
 }

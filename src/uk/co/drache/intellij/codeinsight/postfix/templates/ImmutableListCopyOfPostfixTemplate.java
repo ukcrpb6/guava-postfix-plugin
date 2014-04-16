@@ -2,7 +2,11 @@ package uk.co.drache.intellij.codeinsight.postfix.templates;
 
 import org.jetbrains.annotations.NonNls;
 
+import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassNames;
+
 /**
+ * Postfix template for guava {@link com.google.common.collect.ImmutableList#copyOf(java.util.Collection)}.
+ *
  * @author Bob Browning
  */
 public class ImmutableListCopyOfPostfixTemplate extends ImmutableBaseCopyOfPostfixTemplate {
@@ -22,7 +26,7 @@ public class ImmutableListCopyOfPostfixTemplate extends ImmutableBaseCopyOfPostf
 
   @Override
   protected String getImmutableCollectionImplType() {
-    return "com.google.common.collect.ImmutableList";
+    return GuavaClassNames.IMMUTABLE_LIST;
   }
 
 }

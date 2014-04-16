@@ -16,7 +16,8 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.google.common.base.Preconditions.checkElementIndex;
+import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassNames;
+
 import static com.intellij.codeInsight.template.Template.Property.USE_STATIC_IMPORT_IF_POSSIBLE;
 import static com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils.isArray;
 import static com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils.isIterable;
@@ -25,16 +26,14 @@ import static com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUti
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.isCollection;
 
 /**
+ * Postfix template for guava {@link com.google.common.base.Preconditions#checkElementIndex(int, int)}.
+ *
  * @author Bob Browning
  */
 public class CheckElementIndexPostfixTemplate extends PostfixTemplate {
 
   @NonNls
-  private static final String
-      GUAVA_CHECK_ELEMENT_INDEX_METHOD = "com.google.common.base.Preconditions.checkElementIndex";
-
-  @NonNls
-  private static final String POSTFIX_COMMAND = "checkElementIndex";
+  private static final String CHECK_ELEMENT_INDEX_METHOD = "checkElementIndex";
 
   @NonNls
   private static final String DESCRIPTION =
@@ -44,7 +43,7 @@ public class CheckElementIndexPostfixTemplate extends PostfixTemplate {
   private static final String EXAMPLE = "Preconditions.checkElementIndex(index, size)";
 
   public CheckElementIndexPostfixTemplate() {
-    super(POSTFIX_COMMAND, DESCRIPTION, EXAMPLE);
+    super(CHECK_ELEMENT_INDEX_METHOD, DESCRIPTION, EXAMPLE);
   }
 
   @Override
@@ -81,12 +80,9 @@ public class CheckElementIndexPostfixTemplate extends PostfixTemplate {
     template.setToShortenLongNames(true);
     template.setToReformat(true);
 
-    template.addTextSegment(GUAVA_CHECK_ELEMENT_INDEX_METHOD);
-    template.addTextSegment("(");
+    template.addTextSegment(GuavaClassNames.PRECONDITIONS + "." + CHECK_ELEMENT_INDEX_METHOD + "(");
     template.addVariable("index", new TextExpression(bounds.first), true);
-    template.addTextSegment(", ");
-    template.addTextSegment(bounds.second);
-    template.addTextSegment(")");
+    template.addTextSegment(", " + bounds.second + ")");
     template.addEndVariable();
 
     manager.startTemplate(editor, template);

@@ -16,6 +16,8 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassNames;
+
 import static com.intellij.codeInsight.template.Template.Property.USE_STATIC_IMPORT_IF_POSSIBLE;
 import static com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils.isArray;
 import static com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils.isIterable;
@@ -24,16 +26,14 @@ import static com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUti
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.isCollection;
 
 /**
+ * Postfix template for guava {@link com.google.common.base.Preconditions#checkPositionIndexes(int, int, int)}.
+ *
  * @author Bob Browning
  */
 public class CheckPositionIndexesPostfixTemplate extends PostfixTemplate {
 
   @NonNls
-  private static final String GUAVA_CHECK_POSITION_INDEXES_METHOD =
-      "com.google.common.base.Preconditions.checkPositionIndexes";
-
-  @NonNls
-  private static final String POSTFIX_COMMAND = "checkPositionIndexes";
+  private static final String CHECK_POSITION_INDEXES_METHOD = "checkPositionIndexes";
 
   @NonNls
   private static final String DESCRIPTION =
@@ -43,7 +43,7 @@ public class CheckPositionIndexesPostfixTemplate extends PostfixTemplate {
   private static final String EXAMPLE = "Preconditions.checkPositionIndexes(start, end, size)";
 
   public CheckPositionIndexesPostfixTemplate() {
-    super(POSTFIX_COMMAND, DESCRIPTION, EXAMPLE);
+    super(CHECK_POSITION_INDEXES_METHOD, DESCRIPTION, EXAMPLE);
   }
 
   @Override
@@ -80,14 +80,11 @@ public class CheckPositionIndexesPostfixTemplate extends PostfixTemplate {
     template.setToShortenLongNames(true);
     template.setToReformat(true);
 
-    template.addTextSegment(GUAVA_CHECK_POSITION_INDEXES_METHOD);
-    template.addTextSegment("(");
+    template.addTextSegment(GuavaClassNames.PRECONDITIONS + "." + CHECK_POSITION_INDEXES_METHOD + "(");
     template.addVariable("start", new TextExpression(bounds.first), true);
     template.addTextSegment(", ");
     template.addVariable("end", new TextExpression(bounds.second), true);
-    template.addTextSegment(", ");
-    template.addTextSegment(bounds.third);
-    template.addTextSegment(");");
+    template.addTextSegment(", " + bounds.third + ")");
     template.addEndVariable();
 
     manager.startTemplate(editor, template);
@@ -103,7 +100,7 @@ public class CheckPositionIndexesPostfixTemplate extends PostfixTemplate {
     } else if (isCollection(type)) {
       return expr.getText() + ".size()";
     } else if (isIterable(type)) {
-      return "com.google.common.collect.Iterables.size(" + expr.getText() + ")";
+      return GuavaClassNames.ITERABLES + ".size(" + expr.getText() + ")";
     }
     return null;
   }

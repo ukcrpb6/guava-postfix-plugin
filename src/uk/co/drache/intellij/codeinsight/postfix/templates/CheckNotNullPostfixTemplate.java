@@ -1,7 +1,6 @@
 package uk.co.drache.intellij.codeinsight.postfix.templates;
 
 import com.intellij.codeInsight.template.postfix.templates.ExpressionPostfixTemplateWithChooser;
-import com.intellij.codeInsight.template.postfix.util.Aliases;
 import com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.Condition;
@@ -13,15 +12,14 @@ import org.jetbrains.annotations.NotNull;
 import uk.co.drache.intellij.codeinsight.generation.surroundWith.JavaCheckNotNullSurrounder;
 
 /**
- * Add postfix completion for guava checkNotNull.
+ * Postfix template for guava {@link com.google.common.base.Preconditions#checkNotNull(Object)}.
  *
  * @author Bob Browning
  */
-@Aliases(value = ".cnn")
 public class CheckNotNullPostfixTemplate extends ExpressionPostfixTemplateWithChooser {
 
   @NonNls
-  private static final String POSTFIX_COMMAND = "checkNotNull";
+  private static final String CHECK_NOT_NULL_METHOD = "checkNotNull";
 
   @NonNls
   private static final String DESCRIPTION = "Checks that the value is not null";
@@ -30,7 +28,7 @@ public class CheckNotNullPostfixTemplate extends ExpressionPostfixTemplateWithCh
   private static final String EXAMPLE = "Preconditions.checkNotNull(expr)";
 
   public CheckNotNullPostfixTemplate() {
-    super(POSTFIX_COMMAND, DESCRIPTION, EXAMPLE);
+    super(CHECK_NOT_NULL_METHOD, DESCRIPTION, EXAMPLE);
   }
 
   @Override

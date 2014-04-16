@@ -1,15 +1,11 @@
 package uk.co.drache.intellij.codeinsight.postfix.utils;
 
-import com.intellij.codeInsight.template.postfix.templates.PostfixTemplate;
-import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.CommonClassNames;
-import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiArrayType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiPrimitiveType;
-import com.intellij.psi.PsiStatement;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.InheritanceUtil;
 
@@ -18,15 +14,15 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static com.siyeh.ig.PsiReplacementUtil.replaceExpressionAndShorten;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.ImportUtils.addStaticImport;
+
 /**
  * Collection of helper methods for surrounding an expression with guava preconditions.
  *
  * @author Bob Browning
  */
 public class GuavaPostfixTemplatesUtils {
-
-  @NonNls
-  public static final String GUAVA_PRECONDITIONS = "com.google.common.base.Preconditions";
 
   @NonNls
   private static final String JAVA_LANG_CHAR_SEQUENCE = "java.lang.CharSequence";
@@ -53,17 +49,45 @@ public class GuavaPostfixTemplatesUtils {
            !(((PsiArrayType) type).getComponentType() instanceof PsiPrimitiveType);
   }
 
-  public static void createStatement(@NotNull PsiElement context,
-                                     @NotNull Editor editor,
-                                     @NotNull String prefix,
-                                     @NotNull String suffix, int offset) {
-    PsiExpression expr = PostfixTemplate.getTopmostExpression(context);
-    PsiElement parent = expr != null ? expr.getParent() : null;
-    assert parent instanceof PsiStatement;
-    PsiElementFactory factory = JavaPsiFacade.getInstance(context.getProject()).getElementFactory();
-    PsiStatement statement = factory.createStatementFromText(prefix + expr.getText() + suffix + ";", parent);
-    PsiElement replace = parent.replace(statement);
-    editor.getCaretModel().moveToOffset(replace.getTextRange().getEndOffset() + offset);
+  public static TextRange emptyRangeAt(int offset) {
+    return TextRange.EMPTY_RANGE.shiftRight(offset);
+  }
+
+  /**
+   * Surrounds and replaces expression using static imported method.
+   *
+   * @param expression     The expression to be surrounded
+   * @param qualifierClass The class to import the static method from
+   * @param staticMethod   The static method to import
+   */
+  public static PsiElement surroundExpressionAndShortenStatic(@NotNull PsiExpression expression,
+                                                              @NotNull @NonNls String qualifierClass,
+                                                              @NotNull @NonNls String staticMethod) {
+    return surroundExpressionAndShortenStatic(expression, qualifierClass, staticMethod, true);
+  }
+
+  /**
+   * Surrounds and replaces expression using static imported method.
+   *
+   * @param expression      The expression to be surrounded
+   * @param qualifierClass  The class to import the static method from
+   * @param staticMethod    The static method to use
+   * @param tryStaticImport If true then static import will be added if possible
+   */
+  public static PsiElement surroundExpressionAndShortenStatic(@NotNull PsiExpression expression,
+                                                              @NotNull @NonNls String qualifierClass,
+                                                              @NotNull @NonNls String staticMethod,
+                                                              boolean tryStaticImport) {
+    StringBuilder builder = new StringBuilder();
+    boolean requiresQualifierClass = !tryStaticImport;
+    if (tryStaticImport) {
+      requiresQualifierClass = !addStaticImport(qualifierClass, staticMethod, expression);
+    }
+    if (requiresQualifierClass) {
+      builder.append(qualifierClass).append(".");
+    }
+    builder.append(staticMethod).append("(").append(expression.getText()).append(")");
+    return replaceExpressionAndShorten(expression, builder.toString());
   }
 
 }

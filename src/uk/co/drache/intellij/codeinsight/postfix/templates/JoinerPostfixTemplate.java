@@ -13,20 +13,25 @@ import com.intellij.psi.PsiExpression;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
+import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassNames;
+
 import static com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils.isArray;
 import static com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils.isIterable;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.isIterator;
 
 /**
+ * Postfix template for guava {@link com.google.common.base.Splitter}.
+ *
  * @author Bob Browning
  */
 public class JoinerPostfixTemplate extends ExpressionPostfixTemplateWithChooser {
 
   @NonNls
-  private static final String DESCRIPTION = "Joins pieces of text (specified as an array, Iterable, varargs or even a Map) with a separator";
+  private static final String DESCRIPTION = "Joins pieces of text (specified as an array, "
+                                            + "Iterable, varargs or even a Map) with a separator";
 
   @NonNls
-  private static final String EXAMPLE = "Joiner.on(',').join(array)";
+  private static final String EXAMPLE = "Joiner.on(',').join(parts)";
 
   @NonNls
   private static final String POSTFIX_COMMAND = "join";
@@ -48,11 +53,9 @@ public class JoinerPostfixTemplate extends ExpressionPostfixTemplateWithChooser 
     template.setToShortenLongNames(true);
     template.setToReformat(true);
 
-    template.addTextSegment("com.google.common.base.Joiner.on");
-    template.addTextSegment("(");
+    template.addTextSegment(GuavaClassNames.JOINER + ".on(");
     template.addVariable("separator", new TextExpression("','"), true);
-    template.addTextSegment(")");
-    template.addTextSegment(".join(");
+    template.addTextSegment(").join(");
     template.addTextSegment(expr.getText());
     template.addTextSegment(")");
     template.addEndVariable();

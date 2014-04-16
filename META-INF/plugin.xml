@@ -10,12 +10,12 @@
       <b>Available templates:</b><br/><br/>
 
       <ul>
-        <li> <b>.checkargument</b> - <b>.ca</b> – Checks that the boolean is true – <b>checkArgument(expr)</b></li>
-        <li> <b>.checknotnull</b> - <b>.cnn</b> – Checks that the value is not null – <b>checkNotNull(expr)</b></li>
-        <li> <b>.checkstate</b> - <b>.cs</b> – Checks some state of the object, not dependent on the method arguments – <b>checkState(expr)</b></li>
-        <li> <b>.checkelementindex</b> – Checks that index is a valid element index into a list, string, or array with the specified size – <b>checkElementIndex(index, size)</b></li>
-        <li> <b>.checkpositionindex</b> – Checks that index is a valid position index into a list, string, or array with the specified size  – <b>checkPositionIndex(index, size)</b></li>
-        <li> <b>.checkpositionindexes</b> – Checks that [start, end) is a valid sub range of a list, string, or array with the specified size – <b>checkPositionIndexes(start, end, size)</b></li>
+        <li> <b>.checkArgument</b> - <b>.ca</b> – Checks that the boolean is true – <b>checkArgument(expr)</b></li>
+        <li> <b>.checkNotNull</b> - <b>.cnn</b> – Checks that the value is not null – <b>checkNotNull(expr)</b></li>
+        <li> <b>.checkState</b> - <b>.cs</b> – Checks some state of the object, not dependent on the method arguments – <b>checkState(expr)</b></li>
+        <li> <b>.checkElementIndex</b> – Checks that index is a valid element index into a list, string, or array with the specified size – <b>checkElementIndex(index, size)</b></li>
+        <li> <b>.checkPositionIndex</b> – Checks that index is a valid position index into a list, string, or array with the specified size  – <b>checkPositionIndex(index, size)</b></li>
+        <li> <b>.checkPositionIndexes</b> – Checks that [start, end) is a valid sub range of a list, string, or array with the specified size – <b>checkPositionIndexes(start, end, size)</b></li>
       </ul>
 
       <ul>
@@ -28,6 +28,10 @@
         <li> <b>.immutableListOf</b> -  Creates an immutable list containing a single element – <b>ImmutableList.of(Object)</b></li>
         <li> <b>.immutableSetCopyOf</b> - Creates an immutable set containing the given elements, in order – <b>ImmutableSet.copyOf(Array|Collection|Iterator|Iterable)</b></li>
         <li> <b>.immutableSetOf</b> - Creates an immutable set containing a single element – <b>ImmutableSet.of(Object)</b></li>
+      </ul>
+
+      <ul>
+        <li> <b>.fluentIterable</b> - Creates a fluent iterable that wraps iterable, or iterable itself if it is already a FluentIterable – <b>FluentIterable.from(Iterable)</b></li>
       </ul>
     ]]></description>
 
@@ -58,7 +62,6 @@
     <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.ImmutableSetCopyOfPostfixTemplate"/>
     <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.ImmutableSetOfPostfixTemplate"/>
     <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.FluentIterablePostfixTemplate"/>
-    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.TypeTokenPostfixTemplate"/>
   </extensions>
 
 </idea-plugin>
