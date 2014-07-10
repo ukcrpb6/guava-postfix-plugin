@@ -2,7 +2,7 @@
   <id>uk.co.drache.intellij.guavaPostfixCompletion</id>
   <name>Guava Postfix Completion</name>
   <version>1.0.0</version>
-  <vendor email="rob@drache.co.uk" url="https://github.com/ukcrpb6/guava-postfix-plugin">Drache</vendor>
+  <vendor email="rob@drache.co.uk" url="https://github.com/ukcrpb6/guava-postfix-plugin">Bob Browning</vendor>
 
   <description><![CDATA[
       Postfix completion templates for guava
@@ -10,28 +10,55 @@
       <b>Available templates:</b><br/><br/>
 
       <ul>
-        <li> <b>.checkArgument</b> - <b>.ca</b> – Checks that the boolean is true – <b>checkArgument(expr)</b></li>
-        <li> <b>.checkNotNull</b> - <b>.cnn</b> – Checks that the value is not null – <b>checkNotNull(expr)</b></li>
-        <li> <b>.checkState</b> - <b>.cs</b> – Checks some state of the object, not dependent on the method arguments – <b>checkState(expr)</b></li>
-        <li> <b>.checkElementIndex</b> – Checks that index is a valid element index into a list, string, or array with the specified size – <b>checkElementIndex(index, size)</b></li>
-        <li> <b>.checkPositionIndex</b> – Checks that index is a valid position index into a list, string, or array with the specified size  – <b>checkPositionIndex(index, size)</b></li>
-        <li> <b>.checkPositionIndexes</b> – Checks that [start, end) is a valid sub range of a list, string, or array with the specified size – <b>checkPositionIndexes(start, end, size)</b></li>
+        <li> <b>.checkArgument</b><br/><em>Checks that the boolean is true</em><br/><b>checkArgument(expr)</b></li>
       </ul>
 
       <ul>
-        <li> <b>.join</b> - Joins pieces of text (specified as an array, Iterable, varargs or even a Map) with a separator – <b>Joiner.on(',').join(iterable)</b></li>
-        <li> <b>.split</b> - Extracts non-overlapping substrings from an input string, typically by recognizing appearances of a separator sequence – <b>Splitter.on(',').split(charsequence)</b></li>
+        <li> <b>.checkNotNull</b><br/><em>Checks that the value is not null</em><br/><b>checkNotNull(expr)</b></li>
       </ul>
 
       <ul>
-        <li> <b>.immutableListCopyOf</b> - Creates an immutable list containing the given elements, in order – <b>ImmutableList.copyOf(Array|Collection|Iterator|Iterable)</b></li>
-        <li> <b>.immutableListOf</b> -  Creates an immutable list containing a single element – <b>ImmutableList.of(Object)</b></li>
-        <li> <b>.immutableSetCopyOf</b> - Creates an immutable set containing the given elements, in order – <b>ImmutableSet.copyOf(Array|Collection|Iterator|Iterable)</b></li>
-        <li> <b>.immutableSetOf</b> - Creates an immutable set containing a single element – <b>ImmutableSet.of(Object)</b></li>
+        <li> <b>.checkState</b><br/><em>Checks some state of the object, not dependent on the method arguments</em><br/><b>checkState(expr)</b></li>
       </ul>
 
       <ul>
-        <li> <b>.fluentIterable</b> - Creates a fluent iterable that wraps iterable, or iterable itself if it is already a FluentIterable – <b>FluentIterable.from(Iterable)</b></li>
+        <li> <b>.checkElementIndex</b><br/><em>Checks that index is a valid element index into a list, string, or array with the specified size</em><br/><b>checkElementIndex(index, size)</b></li>
+      </ul>
+
+      <ul>
+        <li> <b>.checkPositionIndex</b><br/><em>Checks that index is a valid position index into a list, string, or array with the specified size </em><br/><b>checkPositionIndex(index, size)</b></li>
+      </ul>
+
+      <ul>
+        <li> <b>.checkPositionIndexes</b><br/><em>Checks that [start, end) is a valid sub range of a list, string, or array with the specified size</em><br/><b>checkPositionIndexes(start, end, size)</b></li>
+      </ul>
+
+      <ul>
+        <li> <b>.join</b><br/><em>Joins pieces of text (specified as an array, Iterable, varargs or even a Map) with a separator</em><br/><b>Joiner.on(',').join(iterable)</b></li>
+      </ul>
+
+      <ul>
+        <li> <b>.split</b><br/><em>Extracts non-overlapping sub-strings from an input string, typically by recognizing appearances of a separator sequence</em><br/><b>Splitter.on(',').split(CharSequence)</b></li>
+      </ul>
+
+      <ul>
+        <li> <b>.immutableListCopyOf</b><br/><em>Creates an immutable list containing the given elements, in order</em><br/><b>ImmutableList.copyOf(Array|Collection|Iterator|Iterable)</b></li>
+      </ul>
+
+      <ul>
+        <li> <b>.immutableListOf</b><br/><em> Creates an immutable list containing a single element</em><br/><b>ImmutableList.of(Object)</b></li>
+      </ul>
+
+      <ul>
+        <li> <b>.immutableSetCopyOf</b><br/><em>Creates an immutable set containing the given elements, in order</em><br/><b>ImmutableSet.copyOf(Array|Collection|Iterator|Iterable)</b></li>
+      </ul>
+
+      <ul>
+        <li> <b>.immutableSetOf</b><br/><em>Creates an immutable set containing a single element</em><br/><b>ImmutableSet.of(Object)</b></li>
+      </ul>
+
+      <ul>
+        <li> <b>.fluentIterable</b><br/><em>Creates a fluent iterable that wraps iterable, or iterable itself if it is already a FluentIterable</em><br/><b>FluentIterable.from(Iterable)</b></li>
       </ul>
     ]]></description>
 
