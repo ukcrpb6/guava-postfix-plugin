@@ -1,7 +1,10 @@
 package uk.co.drache.intellij.codeinsight.postfix.templates;
 
 import com.intellij.codeInsight.template.postfix.templates.ExpressionPostfixTemplateWithChooser;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.util.Condition;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 
 import org.jetbrains.annotations.NotNull;
@@ -28,4 +31,19 @@ public abstract class ImmutableBaseOfPostfixTemplate extends ExpressionPostfixTe
     surroundExpressionAndShortenStatic(expr, getImmutableCollectionImplType(), "of", false);
   }
 
+  @Override
+  public boolean isApplicable(@NotNull PsiElement context, @NotNull Document copyDocument, int newOffset) {
+    return super.isApplicable(context, copyDocument, newOffset);
+  }
+
+  @NotNull
+  @Override
+  protected Condition<PsiExpression> getTypeCondition() {
+    return new Condition<PsiExpression>() {
+      @Override
+      public boolean value(PsiExpression expression) {
+        return expression != null && expression.getType() != null;
+      }
+    };
+  }
 }
