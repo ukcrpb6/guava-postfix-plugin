@@ -15,7 +15,7 @@
  */
 package uk.co.drache.intellij.codeinsight.postfix.utils;
 
-import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.util.Condition;
 import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiArrayType;
 import com.intellij.psi.PsiElement;
@@ -29,8 +29,10 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.siyeh.ig.PsiReplacementUtil.replaceExpressionAndShorten;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.ImportUtils.addStaticImport;
+import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.isArray;
+import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.isIterable;
+import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.isNumber;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.ImportUtils.hasImportStatic;
 
 /**
  * Collection of helper methods for surrounding an expression with guava preconditions.
@@ -38,6 +40,48 @@ import static uk.co.drache.intellij.codeinsight.postfix.utils.ImportUtils.addSta
  * @author Bob Browning
  */
 public class GuavaPostfixTemplatesUtils {
+
+  /**
+   * Condition that returns true if the element is a {@link java.lang.CharSequence}.
+   */
+  public static final Condition<PsiElement> IS_CHAR_SEQUENCE = new Condition<PsiElement>() {
+    @Override
+    public boolean value(PsiElement element) {
+      return element instanceof PsiExpression
+             && isCharSequence(((PsiExpression) element).getType());
+    }
+  };
+
+  /**
+   * Condition that returns true if the element is an iterable or an iterator or an array.
+   */
+  public static final Condition<PsiElement> IS_ARRAY_OR_ITERABLE_OR_ITERATOR = new Condition<PsiElement>() {
+    @Override
+    public boolean value(PsiElement element) {
+      if (element instanceof PsiExpression) {
+        PsiType type = ((PsiExpression) element).getType();
+        return isIterator(type) || isArray(type) || isIterable(type);
+      }
+      return false;
+    }
+  };
+
+  /**
+   * Condition that returns true if the element is an iterable or an iterator or an object array or a collection.
+   */
+  public static final Condition<PsiElement> IS_NON_PRIMITIVE_ARRAY_OR_ITERABLE_OR_ITERATOR =
+      new Condition<PsiElement>() {
+        @Override
+        public boolean value(PsiElement element) {
+          if (element instanceof PsiExpression) {
+            PsiType type = ((PsiExpression) element).getType();
+            return isObjectArrayTypeExpression(type)
+                   || isIterable(type)
+                   || isIterator(type);
+          }
+          return false;
+        }
+      };
 
   @NonNls
   private static final String JAVA_LANG_CHAR_SEQUENCE = "java.lang.CharSequence";
@@ -64,45 +108,34 @@ public class GuavaPostfixTemplatesUtils {
            !(((PsiArrayType) type).getComponentType() instanceof PsiPrimitiveType);
   }
 
-  public static TextRange emptyRangeAt(int offset) {
-    return TextRange.EMPTY_RANGE.shiftRight(offset);
+  /**
+   * Gets the expression for acquiring the size of the specified expression.
+   *
+   * @param expr The expression to evaluate
+   */
+  @Nullable
+  public static String getExpressionNumberOrArrayOrIterableBound(@NotNull PsiExpression expr) {
+    PsiType type = expr.getType();
+    if (isNumber(type)) {
+      return expr.getText();
+    } else if (isArray(type)) {
+      return expr.getText() + ".length";
+    } else if (isCollection(type)) {
+      return expr.getText() + ".size()";
+    } else if (isIterable(type)) {
+      return "com.google.common.collect.Iterables.size(" + expr.getText() + ")";
+    }
+    return null;
   }
 
   /**
-   * Surrounds and replaces expression using static imported method.
-   *
-   * @param expression     The expression to be surrounded
-   * @param qualifierClass The class to import the static method from
-   * @param staticMethod   The static method to import
+   * Get the prefix required for the specified imported static method within the current context.
+   *  @param fqClassName The qualified class name
+   * @param methodName  The method name
+   * @param context     The current context
    */
-  public static PsiElement surroundExpressionAndShortenStatic(@NotNull PsiExpression expression,
-                                                              @NotNull @NonNls String qualifierClass,
-                                                              @NotNull @NonNls String staticMethod) {
-    return surroundExpressionAndShortenStatic(expression, qualifierClass, staticMethod, true);
+  public static String getStaticMethodPrefix(@NotNull String fqClassName, @NotNull String methodName,
+                                             @NotNull PsiElement context) {
+    return hasImportStatic(fqClassName, methodName, context) ? methodName : (fqClassName + "." + methodName);
   }
-
-  /**
-   * Surrounds and replaces expression using static imported method.
-   *
-   * @param expression      The expression to be surrounded
-   * @param qualifierClass  The class to import the static method from
-   * @param staticMethod    The static method to use
-   * @param tryStaticImport If true then static import will be added if possible
-   */
-  public static PsiElement surroundExpressionAndShortenStatic(@NotNull PsiExpression expression,
-                                                              @NotNull @NonNls String qualifierClass,
-                                                              @NotNull @NonNls String staticMethod,
-                                                              boolean tryStaticImport) {
-    StringBuilder builder = new StringBuilder();
-    boolean requiresQualifierClass = !tryStaticImport;
-    if (tryStaticImport) {
-      requiresQualifierClass = !addStaticImport(qualifierClass, staticMethod, expression);
-    }
-    if (requiresQualifierClass) {
-      builder.append(qualifierClass).append(".");
-    }
-    builder.append(staticMethod).append("(").append(expression.getText()).append(")");
-    return replaceExpressionAndShorten(expression, builder.toString());
-  }
-
 }

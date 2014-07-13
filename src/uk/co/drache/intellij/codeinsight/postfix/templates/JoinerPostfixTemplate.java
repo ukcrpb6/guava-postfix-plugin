@@ -16,78 +16,40 @@
 package uk.co.drache.intellij.codeinsight.postfix.templates;
 
 import com.intellij.codeInsight.template.Template;
-import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.codeInsight.template.impl.TextExpression;
-import com.intellij.codeInsight.template.postfix.templates.ExpressionPostfixTemplateWithChooser;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
-import com.intellij.psi.PsiExpression;
+import com.intellij.codeInsight.template.postfix.templates.StringBasedPostfixTemplate;
+import com.intellij.psi.PsiElement;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassNames;
-
-import static com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils.isArray;
-import static com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils.isIterable;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.isIterator;
+import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.JOINER;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.IS_ARRAY_OR_ITERABLE_OR_ITERATOR;
 
 /**
- * Postfix template for guava {@link com.google.common.base.Splitter}.
+ * Postfix template for guava {@code com.google.common.base.Splitter}.
  *
  * @author Bob Browning
  */
-public class JoinerPostfixTemplate extends ExpressionPostfixTemplateWithChooser {
+public class JoinerPostfixTemplate extends StringBasedPostfixTemplate {
 
   @NonNls
-  private static final String DESCRIPTION = "Joins pieces of text (specified as an array, "
-                                            + "Iterable, varargs or even a Map) with a separator";
-
-  @NonNls
-  private static final String EXAMPLE = "Joiner.on(',').join(parts)";
-
-  @NonNls
-  private static final String POSTFIX_COMMAND = "join";
+  private static final String FQ_METHOD_ON = JOINER.getQualifiedStaticMethodName("on");
 
   public JoinerPostfixTemplate() {
-    super(POSTFIX_COMMAND, DESCRIPTION, EXAMPLE);
+    super("join", "Joiner.on(',').join(parts)", JAVA_PSI_INFO, IS_ARRAY_OR_ITERABLE_OR_ITERATOR);
   }
 
   @Override
-  protected void doIt(@NotNull Editor editor, @NotNull PsiExpression expr) {
-    Project project = expr.getProject();
-    Document document = editor.getDocument();
-
-    document.deleteString(expr.getTextRange().getStartOffset(), expr.getTextRange().getEndOffset());
-    TemplateManager manager = TemplateManager.getInstance(project);
-
-    Template template = manager.createTemplate("", "");
-    template.setToIndent(true);
-    template.setToShortenLongNames(true);
-    template.setToReformat(true);
-
-    template.addTextSegment(GuavaClassNames.JOINER + ".on(");
-    template.addVariable("separator", new TextExpression("','"), true);
-    template.addTextSegment(").join(");
-    template.addTextSegment(expr.getText());
-    template.addTextSegment(")");
-    template.addEndVariable();
-
-    manager.startTemplate(editor, template);
+  public void setVariables(@NotNull Template template, @NotNull PsiElement element) {
+    TextExpression on = new TextExpression("','");
+    template.addVariable("on", on, on, true);
   }
 
-  @NotNull
   @Override
-  protected Condition<PsiExpression> getTypeCondition() {
-    return new Condition<PsiExpression>() {
-      @Override
-      public boolean value(PsiExpression expr) {
-        return expr != null && (isIterator(expr.getType()) ||
-                                isArray(expr.getType()) ||
-                                isIterable(expr.getType()));
-      }
-    };
+  public final String getTemplateString(@NotNull PsiElement element) {
+    return FQ_METHOD_ON + "($on$).join($expr$);$END$";
   }
+
 }

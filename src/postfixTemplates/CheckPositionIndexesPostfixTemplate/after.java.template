@@ -1,0 +1,7 @@
+import com.google.common.Preconditions;
+
+public class Foo {
+  void m(int[] arr) {
+      Preconditions.checkPositionIndexes(0, arr.length, arr.length);
+  }
+}

@@ -67,7 +67,7 @@
   ]]></change-notes>
 
   <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
-  <idea-version since-build="131"/>
+  <idea-version since-build="134.1172"/>
 
   <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
        on how to target different products -->
@@ -76,19 +76,8 @@
   <depends>com.intellij.modules.java</depends>
 
   <extensions defaultExtensionNs="com.intellij">
-    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.CheckArgumentPostfixTemplate"/>
-    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.CheckNotNullPostfixTemplate"/>
-    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.CheckStatePostfixTemplate"/>
-    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.CheckElementIndexPostfixTemplate"/>
-    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.CheckPositionIndexPostfixTemplate"/>
-    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.CheckPositionIndexesPostfixTemplate"/>
-    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.SplitterPostfixTemplate"/>
-    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.JoinerPostfixTemplate"/>
-    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.ImmutableListCopyOfPostfixTemplate"/>
-    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.ImmutableListOfPostfixTemplate"/>
-    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.ImmutableSetCopyOfPostfixTemplate"/>
-    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.ImmutableSetOfPostfixTemplate"/>
-    <postfixTemplate implementation="uk.co.drache.intellij.codeinsight.postfix.templates.FluentIterablePostfixTemplate"/>
+    <codeInsight.template.postfixTemplateProvider language="JAVA"
+                                                  implementationClass="uk.co.drache.intellij.codeinsight.postfix.templates.GuavaPostfixTemplateProvider"/>
   </extensions>
 
 </idea-plugin>

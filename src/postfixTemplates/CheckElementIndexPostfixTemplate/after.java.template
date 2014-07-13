@@ -1,0 +1,7 @@
+import com.google.common.Preconditions;
+
+public class Foo {
+  void m(int[] arr) {
+      Preconditions.checkElementIndex(0, arr.length);
+  }
+}

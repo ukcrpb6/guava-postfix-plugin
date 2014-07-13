@@ -1,0 +1,7 @@
+import com.google.collect.FluentIterable;
+
+public class Foo {
+  void m(Iterable<Object> iterable) {
+    FluentIterable.from(iterable);
+  }
+}

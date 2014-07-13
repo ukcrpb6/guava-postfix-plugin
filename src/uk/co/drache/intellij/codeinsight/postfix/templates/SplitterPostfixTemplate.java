@@ -16,74 +16,40 @@
 package uk.co.drache.intellij.codeinsight.postfix.templates;
 
 import com.intellij.codeInsight.template.Template;
-import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.codeInsight.template.impl.TextExpression;
-import com.intellij.codeInsight.template.postfix.templates.ExpressionPostfixTemplateWithChooser;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
-import com.intellij.psi.PsiExpression;
+import com.intellij.codeInsight.template.postfix.templates.StringBasedPostfixTemplate;
+import com.intellij.psi.PsiElement;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassNames;
-import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils;
+import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.SPLITTER;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.IS_CHAR_SEQUENCE;
 
 /**
- * Postfix template for guava {@link com.google.common.base.Splitter}.
+ * Postfix template for guava {@code com.google.common.base.Splitter}.
  *
  * @author Bob Browning
  */
-public class SplitterPostfixTemplate extends ExpressionPostfixTemplateWithChooser {
+public class SplitterPostfixTemplate extends StringBasedPostfixTemplate {
 
   @NonNls
-  private static final String DESCRIPTION = "Extracts non-overlapping substrings from an input string, "
-                                            + "typically by recognizing appearances of a separator sequence";
-
-  @NonNls
-  private static final String EXAMPLE = "Splitter.on(',').split(sequence)";
-
-  @NonNls
-  private static final String POSTFIX_COMMAND = "split";
+  private static final String FQ_METHOD_ON = SPLITTER.getQualifiedStaticMethodName("on");
 
   public SplitterPostfixTemplate() {
-    super(POSTFIX_COMMAND, DESCRIPTION, EXAMPLE);
+    super("split", "Splitter.on(',').split(sequence)", JAVA_PSI_INFO, IS_CHAR_SEQUENCE);
   }
 
   @Override
-  protected void doIt(@NotNull Editor editor, @NotNull PsiExpression expr) {
-    Project project = expr.getProject();
-    Document document = editor.getDocument();
-
-    document.deleteString(expr.getTextRange().getStartOffset(), expr.getTextRange().getEndOffset());
-    TemplateManager manager = TemplateManager.getInstance(project);
-
-    Template template = manager.createTemplate("", "");
-    template.setToIndent(true);
-    template.setToShortenLongNames(true);
-    template.setToReformat(true);
-
-    template.addTextSegment(GuavaClassNames.SPLITTER + ".on(");
-    template.addVariable("separator", new TextExpression("','"), true);
-    template.addTextSegment(").split(");
-    template.addTextSegment(expr.getText());
-    template.addTextSegment(")");
-    template.addEndVariable();
-
-    manager.startTemplate(editor, template);
+  public void setVariables(@NotNull Template template, @NotNull PsiElement element) {
+    TextExpression on = new TextExpression("','");
+    template.addVariable("on", on, on, true);
   }
 
-  @NotNull
   @Override
-  protected Condition<PsiExpression> getTypeCondition() {
-    return new Condition<PsiExpression>() {
-      @Override
-      public boolean value(PsiExpression expr) {
-        return expr != null && GuavaPostfixTemplatesUtils.isCharSequence(expr.getType());
-      }
-    };
+  public final String getTemplateString(@NotNull PsiElement element) {
+    return FQ_METHOD_ON + "($on$).split($expr$);$END$";
   }
 
 }

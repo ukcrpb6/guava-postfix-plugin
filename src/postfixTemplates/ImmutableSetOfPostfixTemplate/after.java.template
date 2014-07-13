@@ -1,0 +1,7 @@
+import static com.google.collect.ImmutableSet;
+
+public class Foo {
+  void m(Object object) {
+    ImmutableSet.of(object);
+  }
+}

@@ -19,33 +19,38 @@ import com.intellij.codeInsight.template.postfix.templates.ExpressionPostfixTemp
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
+import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName;
+import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils;
+
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
-import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.isIterable;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.FLUENT_ITERABLE;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.getStaticMethodPrefix;
 
 /**
- * Postfix template for guava {@code com.google.common.collect.FluentIterable#from(Iterable)}.
+ * Postfix template for guava immutable .copyOf and .of methods.
  *
  * @author Bob Browning
  */
-public class FluentIterablePostfixTemplate extends ExpressionPostfixTemplateWithChooser {
+public abstract class ImmutableBasePostfixTemplate extends ExpressionPostfixTemplateWithChooser {
 
-  @NonNls
-  private static final String FQ_METHOD_FROM = FLUENT_ITERABLE.getQualifiedStaticMethodName("from");
+  private final GuavaClassName className;
+  private final String methodName;
 
-  public FluentIterablePostfixTemplate() {
-    super("fluentIterable", "FluentIterable.from(iterable)", JAVA_PSI_INFO);
+  protected ImmutableBasePostfixTemplate(@NotNull String key, @NotNull String example,
+                                         @NotNull GuavaClassName className,
+                                         @NotNull String methodName) {
+    super(key, example, JAVA_PSI_INFO);
+    this.className = className;
+    this.methodName = methodName;
   }
 
   @Override
   protected void doIt(@NotNull Editor editor, @NotNull PsiElement element) {
-    PsiElement replacement = myInfo.createExpression(element, FQ_METHOD_FROM + "(", ")");
+    String staticMethodPrefix = getStaticMethodPrefix(className.getClassName(), methodName, element);
+    PsiElement replacement = myInfo.createExpression(element, staticMethodPrefix + "(", ")");
     JavaCodeStyleManager.getInstance(element.getProject()).shortenClassReferences(replacement);
     element.replace(replacement);
   }
@@ -53,11 +58,6 @@ public class FluentIterablePostfixTemplate extends ExpressionPostfixTemplateWith
   @NotNull
   @Override
   protected Condition<PsiElement> getTypeCondition() {
-    return new Condition<PsiElement>() {
-      @Override
-      public boolean value(PsiElement element) {
-        return element instanceof PsiExpression && isIterable(((PsiExpression) element).getType());
-      }
-    };
+    return GuavaPostfixTemplatesUtils.IS_NON_PRIMITIVE_ARRAY_OR_ITERABLE_OR_ITERATOR;
   }
 }

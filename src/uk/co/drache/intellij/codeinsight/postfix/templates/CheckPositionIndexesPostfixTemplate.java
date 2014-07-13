@@ -16,114 +16,62 @@
 package uk.co.drache.intellij.codeinsight.postfix.templates;
 
 import com.intellij.codeInsight.template.Template;
-import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.codeInsight.template.impl.TextExpression;
-import com.intellij.codeInsight.template.postfix.templates.PostfixTemplate;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Trinity;
+import com.intellij.codeInsight.template.postfix.templates.StringBasedPostfixTemplate;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiType;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassNames;
-
-import static com.intellij.codeInsight.template.Template.Property.USE_STATIC_IMPORT_IF_POSSIBLE;
-import static com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils.isArray;
-import static com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils.isIterable;
-import static com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils.isNumber;
-import static com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils.showErrorHint;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.isCollection;
+import static com.intellij.codeInsight.template.postfix.templates.ForIndexedPostfixTemplate.IS_NUMBER_OR_ARRAY_OR_ITERABLE;
+import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.PRECONDITIONS;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.getExpressionNumberOrArrayOrIterableBound;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.getStaticMethodPrefix;
 
 /**
- * Postfix template for guava {@link com.google.common.base.Preconditions#checkPositionIndexes(int, int, int)}.
+ * Postfix template for guava {@code com.google.common.base.Preconditions#checkPositionIndexes(int, int, int)}.
  *
  * @author Bob Browning
  */
-public class CheckPositionIndexesPostfixTemplate extends PostfixTemplate {
-
-  @NonNls
-  private static final String CHECK_POSITION_INDEXES_METHOD = "checkPositionIndexes";
-
-  @NonNls
-  private static final String DESCRIPTION =
-      "Checks that [start, end) is a valid sub range of a list, string, or array with the specified size.";
+public class CheckPositionIndexesPostfixTemplate extends StringBasedPostfixTemplate {
 
   @NonNls
   private static final String EXAMPLE = "Preconditions.checkPositionIndexes(start, end, size)";
 
   public CheckPositionIndexesPostfixTemplate() {
-    super(CHECK_POSITION_INDEXES_METHOD, DESCRIPTION, EXAMPLE);
+    super("checkPositionIndexes", EXAMPLE, JAVA_PSI_INFO, IS_NUMBER_OR_ARRAY_OR_ITERABLE);
   }
 
   @Override
-  public boolean isApplicable(@NotNull PsiElement context, @NotNull Document copyDocument, int newOffset) {
-    PsiExpression expr = getTopmostExpression(context);
-    return expr != null && (isNumber(expr.getType()) ||
-                            isArray(expr.getType()) ||
-                            isIterable(expr.getType()));
+  public void setVariables(@NotNull Template template, @NotNull PsiElement element) {
+    TextExpression start = new TextExpression("0");
+    TextExpression end = new TextExpression(getExpressionNumberOrArrayOrIterableBound((PsiExpression) element));
+    template.addVariable("start", start, start, true);
+    template.addVariable("end", end, end, true);
   }
 
   @Override
-  public void expand(@NotNull PsiElement context, @NotNull Editor editor) {
-    PsiExpression expr = getTopmostExpression(context);
-    if (expr == null) {
-      showErrorHint(context.getProject(), editor);
-      return;
+  public final String getTemplateString(@NotNull PsiElement element) {
+    PsiExpression expr = (PsiExpression) element;
+    String bound = getExpressionNumberOrArrayOrIterableBound(expr);
+    if (bound == null) {
+      return null;
     }
 
-    Trinity<String, String, String> bounds = calculateBounds(expr);
-    if (bounds == null) {
-      showErrorHint(context.getProject(), editor);
-      return;
-    }
-
-    Project project = context.getProject();
-    Document document = editor.getDocument();
-
-    document.deleteString(expr.getTextRange().getStartOffset(), expr.getTextRange().getEndOffset());
-    TemplateManager manager = TemplateManager.getInstance(project);
-
-    Template template = manager.createTemplate("", "");
-    template.setValue(USE_STATIC_IMPORT_IF_POSSIBLE, true);
-    template.setToIndent(true);
-    template.setToShortenLongNames(true);
-    template.setToReformat(true);
-
-    template.addTextSegment(GuavaClassNames.PRECONDITIONS + "." + CHECK_POSITION_INDEXES_METHOD + "(");
-    template.addVariable("start", new TextExpression(bounds.first), true);
-    template.addTextSegment(", ");
-    template.addVariable("end", new TextExpression(bounds.second), true);
-    template.addTextSegment(", " + bounds.third + ")");
-    template.addEndVariable();
-
-    manager.startTemplate(editor, template);
+    return getStringTemplate(expr).replace("$bound$", bound);
   }
 
-  @Nullable
-  protected static String getExpressionBound(@NotNull PsiExpression expr) {
-    PsiType type = expr.getType();
-    if (isNumber(type)) {
-      return expr.getText();
-    } else if (isArray(type)) {
-      return expr.getText() + ".length";
-    } else if (isCollection(type)) {
-      return expr.getText() + ".size()";
-    } else if (isIterable(type)) {
-      return GuavaClassNames.ITERABLES + ".size(" + expr.getText() + ")";
-    }
-    return null;
+  @NotNull
+  private String getStringTemplate(@NotNull PsiExpression expr) {
+    return getStaticMethodPrefix(PRECONDITIONS.getClassName(), "checkPositionIndexes", expr)
+           + "($start$, $end$, $bound$);$END$";
   }
 
-  @Nullable
-  protected Trinity<String, String, String> calculateBounds(@NotNull PsiExpression expression) {
-    String bound = getExpressionBound(expression);
-    return bound != null ? Trinity.create("0", bound, bound) : null;
+  @Override
+  protected boolean shouldAddExpressionToContext() {
+    return false;
   }
 
 }

@@ -1,0 +1,7 @@
+import com.google.common.base.Splitter;
+
+public class Foo {
+  void m(String s) {
+      Splitter.on(',').split(s);
+  }
+}

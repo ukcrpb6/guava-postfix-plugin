@@ -15,55 +15,66 @@
  */
 package uk.co.drache.intellij.codeinsight.postfix.utils;
 
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.siyeh.ig.psiutils.ClassUtils;
+
 /**
  * Collection of static strings representing guava class names.
  *
  * @author Bob Browning
  */
-public final class GuavaClassNames {
-
-  /**
-   * Base package.
-   */
-  private static final String COM_GOOGLE_COMMON_BASE = "com.google.common.base";
-
-  /**
-   * Collect package.
-   */
-  private static final String COM_GOOGLE_COMMON_COLLECT = "com.google.common.collect";
-
+public enum GuavaClassName {
   /**
    * {@link com.google.common.collect.FluentIterable}.
    */
-  public static final String FLUENT_ITERABLE = COM_GOOGLE_COMMON_COLLECT + ".FluentIterable";
+  FLUENT_ITERABLE("com.google.common.collect.FluentIterable"),
 
   /**
    * {@link com.google.common.collect.ImmutableList}.
    */
-  public static final String IMMUTABLE_LIST = COM_GOOGLE_COMMON_COLLECT + ".ImmutableList";
+  IMMUTABLE_LIST("com.google.common.collect.ImmutableList"),
 
   /**
    * {@link com.google.common.collect.ImmutableSet}.
    */
-  public static final String IMMUTABLE_SET = COM_GOOGLE_COMMON_COLLECT + ".ImmutableSet";
+  IMMUTABLE_SET("com.google.common.collect.ImmutableSet"),
 
   /**
    * {@link com.google.common.collect.Iterables}.
    */
-  public static final String ITERABLES = COM_GOOGLE_COMMON_COLLECT + ".Iterables";
+  ITERABLES("com.google.common.collect.Iterables"),
 
   /**
    * {@link com.google.common.base.Joiner}.
    */
-  public static final String JOINER = COM_GOOGLE_COMMON_BASE + ".Joiner";
+  JOINER("com.google.common.base.Joiner"),
 
   /**
    * {@link com.google.common.base.Splitter}.
    */
-  public static final String SPLITTER = COM_GOOGLE_COMMON_BASE + ".Splitter";
+  SPLITTER("com.google.common.base.Splitter"),
 
   /**
    * {@link com.google.common.base.Preconditions}.
    */
-  public static final String PRECONDITIONS = COM_GOOGLE_COMMON_BASE + ".Preconditions";
+  PRECONDITIONS("com.google.common.base.Preconditions");
+
+  private final String fqClassName;
+
+  GuavaClassName(String fqClassName) {
+    this.fqClassName = fqClassName;
+  }
+
+  public String getClassName() {
+    return fqClassName;
+  }
+
+  public PsiClass getPsiClass(PsiElement context) {
+    return ClassUtils.findClass(fqClassName, context);
+  }
+
+  public String getQualifiedStaticMethodName(String methodName) {
+    return fqClassName + "." + methodName;
+  }
 }

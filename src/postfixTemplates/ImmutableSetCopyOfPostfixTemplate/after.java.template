@@ -1,0 +1,7 @@
+import static com.google.collect.ImmutableSet;
+
+public class Foo {
+  void m(Iterable<Object> iterable) {
+    ImmutableSet.copyOf(iterable);
+  }
+}

@@ -17,8 +17,6 @@ package uk.co.drache.intellij.codeinsight.postfix.templates;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * Base test class for PostfixTemplates.
  *
@@ -29,7 +27,7 @@ public abstract class BasePostfixTemplateTest extends AbstractPostfixTemplateTes
   private final String dataPath;
 
   public BasePostfixTemplateTest(@NotNull String dataPath) {
-    this.dataPath = checkNotNull(dataPath);
+    this.dataPath = dataPath;
   }
 
   @Override

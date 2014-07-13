@@ -1,0 +1,7 @@
+import com.google.common.Preconditions;
+
+public class Foo {
+  void m(Object o) {
+      Preconditions.checkNotNul(o);
+  }
+}

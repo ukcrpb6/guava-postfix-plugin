@@ -1,0 +1,7 @@
+import com.google.common.Preconditions;
+
+public class Foo {
+  void m(boolean b) {
+      Preconditions.checkArgument(b);
+  }
+}

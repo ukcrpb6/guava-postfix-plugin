@@ -15,50 +15,31 @@
  */
 package uk.co.drache.intellij.codeinsight.postfix.templates;
 
-import com.intellij.codeInsight.template.postfix.templates.ExpressionPostfixTemplateWithChooser;
-import com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.Condition;
-import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiElement;
 
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import uk.co.drache.intellij.codeinsight.generation.surroundWith.JavaCheckNotNullSurrounder;
+import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_NON_VOID;
+import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.PRECONDITIONS;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.getStaticMethodPrefix;
 
 /**
- * Postfix template for guava {@link com.google.common.base.Preconditions#checkNotNull(Object)}.
+ * Postfix template for guava {@code com.google.common.base.Preconditions#checkNotNull(Object)}.
  *
  * @author Bob Browning
  */
-public class CheckNotNullPostfixTemplate extends ExpressionPostfixTemplateWithChooser {
-
-  @NonNls
-  private static final String CHECK_NOT_NULL_METHOD = "checkNotNull";
-
-  @NonNls
-  private static final String DESCRIPTION = "Checks that the value is not null";
-
-  @NonNls
-  private static final String EXAMPLE = "Preconditions.checkNotNull(expr)";
+public class CheckNotNullPostfixTemplate extends StringBasedJavaPostfixTemplateWithChooser {
 
   public CheckNotNullPostfixTemplate() {
-    super(CHECK_NOT_NULL_METHOD, DESCRIPTION, EXAMPLE);
+    super("checkNotNull", "Preconditions.checkNotNull(expr)", JAVA_PSI_INFO, IS_NON_VOID);
   }
 
+  @Nullable
   @Override
-  protected void doIt(@NotNull Editor editor, @NotNull PsiExpression expr) {
-    PostfixTemplatesUtils.apply(new JavaCheckNotNullSurrounder(), expr.getProject(), editor, expr);
+  public String getTemplateString(@NotNull PsiElement element) {
+    return getStaticMethodPrefix(PRECONDITIONS.getClassName(), "checkNotNull", element) + "($expr$);$END$";
   }
 
-  @NotNull
-  @Override
-  protected Condition<PsiExpression> getTypeCondition() {
-    return new Condition<PsiExpression>() {
-      @Override
-      public boolean value(PsiExpression expr) {
-        return PostfixTemplatesUtils.isNotPrimitiveTypeExpression(expr);
-      }
-    };
-  }
 }
