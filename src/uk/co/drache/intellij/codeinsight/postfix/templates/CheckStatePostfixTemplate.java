@@ -15,7 +15,6 @@
  */
 package uk.co.drache.intellij.codeinsight.postfix.templates;
 
-import com.intellij.codeInsight.template.postfix.templates.StringBasedPostfixTemplate;
 import com.intellij.psi.PsiElement;
 
 import org.jetbrains.annotations.NotNull;
@@ -24,23 +23,30 @@ import org.jetbrains.annotations.Nullable;
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_BOOLEAN;
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.PRECONDITIONS;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.getStaticMethodPrefix;
 
 /**
  * Postfix template for guava {@code com.google.common.base.Preconditions#checkState(boolean)}.
  *
  * @author Bob Browning
  */
-public class CheckStatePostfixTemplate extends StringBasedPostfixTemplate {
+public class CheckStatePostfixTemplate extends RichStringBasedPostfixTemplate {
 
   public CheckStatePostfixTemplate() {
     super("checkState", "Preconditions.checkState(expression)", JAVA_PSI_INFO, IS_BOOLEAN);
   }
 
-  @Nullable
   @Override
   public String getTemplateString(@NotNull PsiElement element) {
-    return getStaticMethodPrefix(PRECONDITIONS.getClassName(), "checkState", element) + "($expr$);$END$";
+    return getStaticMethodPrefix(PRECONDITIONS, "checkState", element) + "($expr$);$END$";
   }
 
+  @Override
+  protected boolean shouldRemoveParent() {
+    return false;
+  }
+
+  @Override
+  protected boolean shouldUseStaticImportIfPossible() {
+    return true;
+  }
 }

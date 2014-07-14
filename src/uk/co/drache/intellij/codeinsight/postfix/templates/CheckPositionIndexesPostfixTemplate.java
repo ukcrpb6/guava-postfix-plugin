@@ -17,7 +17,6 @@ package uk.co.drache.intellij.codeinsight.postfix.templates;
 
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.impl.TextExpression;
-import com.intellij.codeInsight.template.postfix.templates.StringBasedPostfixTemplate;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 
@@ -28,14 +27,13 @@ import static com.intellij.codeInsight.template.postfix.templates.ForIndexedPost
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.PRECONDITIONS;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.getExpressionNumberOrArrayOrIterableBound;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.getStaticMethodPrefix;
 
 /**
  * Postfix template for guava {@code com.google.common.base.Preconditions#checkPositionIndexes(int, int, int)}.
  *
  * @author Bob Browning
  */
-public class CheckPositionIndexesPostfixTemplate extends StringBasedPostfixTemplate {
+public class CheckPositionIndexesPostfixTemplate extends RichStringBasedPostfixTemplate {
 
   @NonNls
   private static final String EXAMPLE = "Preconditions.checkPositionIndexes(start, end, size)";
@@ -64,9 +62,8 @@ public class CheckPositionIndexesPostfixTemplate extends StringBasedPostfixTempl
   }
 
   @NotNull
-  private String getStringTemplate(@NotNull PsiExpression expr) {
-    return getStaticMethodPrefix(PRECONDITIONS.getClassName(), "checkPositionIndexes", expr)
-           + "($start$, $end$, $bound$);$END$";
+  private String getStringTemplate(@NotNull PsiElement element) {
+    return getStaticMethodPrefix(PRECONDITIONS, "checkPositionIndexes", element) + "($start$, $end$, $bound$);$END$";
   }
 
   @Override
@@ -74,4 +71,8 @@ public class CheckPositionIndexesPostfixTemplate extends StringBasedPostfixTempl
     return false;
   }
 
+  @Override
+  protected boolean shouldUseStaticImportIfPossible() {
+    return true;
+  }
 }

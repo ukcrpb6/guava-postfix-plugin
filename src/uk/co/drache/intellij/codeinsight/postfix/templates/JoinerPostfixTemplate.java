@@ -17,25 +17,21 @@ package uk.co.drache.intellij.codeinsight.postfix.templates;
 
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.impl.TextExpression;
-import com.intellij.codeInsight.template.postfix.templates.StringBasedPostfixTemplate;
 import com.intellij.psi.PsiElement;
 
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.JOINER;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.IS_ARRAY_OR_ITERABLE_OR_ITERATOR;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.isTopmostExpression;
 
 /**
  * Postfix template for guava {@code com.google.common.base.Splitter}.
  *
  * @author Bob Browning
  */
-public class JoinerPostfixTemplate extends StringBasedPostfixTemplate {
-
-  @NonNls
-  private static final String FQ_METHOD_ON = JOINER.getQualifiedStaticMethodName("on");
+public class JoinerPostfixTemplate extends StringBasedJavaPostfixTemplateWithChooser {
 
   public JoinerPostfixTemplate() {
     super("join", "Joiner.on(',').join(parts)", JAVA_PSI_INFO, IS_ARRAY_OR_ITERABLE_OR_ITERATOR);
@@ -49,7 +45,8 @@ public class JoinerPostfixTemplate extends StringBasedPostfixTemplate {
 
   @Override
   public final String getTemplateString(@NotNull PsiElement element) {
-    return FQ_METHOD_ON + "($on$).join($expr$);$END$";
+    return getStaticMethodPrefix(JOINER, "on", element) + "($on$).join($expr$)" +
+           (isTopmostExpression(element) ? ";$END$" : "$END$");
   }
 
 }

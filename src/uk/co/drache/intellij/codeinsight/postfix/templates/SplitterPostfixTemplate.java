@@ -17,25 +17,21 @@ package uk.co.drache.intellij.codeinsight.postfix.templates;
 
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.impl.TextExpression;
-import com.intellij.codeInsight.template.postfix.templates.StringBasedPostfixTemplate;
 import com.intellij.psi.PsiElement;
 
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.SPLITTER;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.IS_CHAR_SEQUENCE;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.isTopmostExpression;
 
 /**
  * Postfix template for guava {@code com.google.common.base.Splitter}.
  *
  * @author Bob Browning
  */
-public class SplitterPostfixTemplate extends StringBasedPostfixTemplate {
-
-  @NonNls
-  private static final String FQ_METHOD_ON = SPLITTER.getQualifiedStaticMethodName("on");
+public class SplitterPostfixTemplate extends StringBasedJavaPostfixTemplateWithChooser {
 
   public SplitterPostfixTemplate() {
     super("split", "Splitter.on(',').split(sequence)", JAVA_PSI_INFO, IS_CHAR_SEQUENCE);
@@ -49,7 +45,8 @@ public class SplitterPostfixTemplate extends StringBasedPostfixTemplate {
 
   @Override
   public final String getTemplateString(@NotNull PsiElement element) {
-    return FQ_METHOD_ON + "($on$).split($expr$);$END$";
+    return getStaticMethodPrefix(SPLITTER, "on", element) + "($on$).split($expr$)"
+           + (isTopmostExpression(element) ? ";$END$" : "$END$");
   }
 
 }

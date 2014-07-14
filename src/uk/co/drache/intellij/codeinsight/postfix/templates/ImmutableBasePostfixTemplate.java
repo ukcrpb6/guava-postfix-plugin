@@ -15,26 +15,23 @@
  */
 package uk.co.drache.intellij.codeinsight.postfix.templates;
 
-import com.intellij.codeInsight.template.postfix.templates.ExpressionPostfixTemplateWithChooser;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName;
-import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils;
 
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.getStaticMethodPrefix;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.IS_NON_PRIMITIVE_ARRAY_OR_ITERABLE_OR_ITERATOR;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.isTopmostExpression;
 
 /**
  * Postfix template for guava immutable .copyOf and .of methods.
  *
  * @author Bob Browning
  */
-public abstract class ImmutableBasePostfixTemplate extends ExpressionPostfixTemplateWithChooser {
+public abstract class ImmutableBasePostfixTemplate extends StringBasedJavaPostfixTemplateWithChooser {
 
   private final GuavaClassName className;
   private final String methodName;
@@ -42,22 +39,15 @@ public abstract class ImmutableBasePostfixTemplate extends ExpressionPostfixTemp
   protected ImmutableBasePostfixTemplate(@NotNull String key, @NotNull String example,
                                          @NotNull GuavaClassName className,
                                          @NotNull String methodName) {
-    super(key, example, JAVA_PSI_INFO);
+    super(key, example, JAVA_PSI_INFO, IS_NON_PRIMITIVE_ARRAY_OR_ITERABLE_OR_ITERATOR);
     this.className = className;
     this.methodName = methodName;
   }
 
+  @Nullable
   @Override
-  protected void doIt(@NotNull Editor editor, @NotNull PsiElement element) {
-    String staticMethodPrefix = getStaticMethodPrefix(className.getClassName(), methodName, element);
-    PsiElement replacement = myInfo.createExpression(element, staticMethodPrefix + "(", ")");
-    JavaCodeStyleManager.getInstance(element.getProject()).shortenClassReferences(replacement);
-    element.replace(replacement);
-  }
-
-  @NotNull
-  @Override
-  protected Condition<PsiElement> getTypeCondition() {
-    return GuavaPostfixTemplatesUtils.IS_NON_PRIMITIVE_ARRAY_OR_ITERABLE_OR_ITERATOR;
+  public String getTemplateString(@NotNull PsiElement element) {
+    return getStaticMethodPrefix(className, methodName, element) +
+           (isTopmostExpression(element) ? "($expr$);$END$" : "($expr$)$END$");
   }
 }

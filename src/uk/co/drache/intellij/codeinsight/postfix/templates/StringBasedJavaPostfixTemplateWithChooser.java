@@ -12,8 +12,12 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElement;
 
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName;
+import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils;
 
 /**
  * @author Bob Browning
@@ -33,35 +37,29 @@ public abstract class StringBasedJavaPostfixTemplateWithChooser extends JavaPost
   }
 
   @Override
-  public boolean isApplicable(@NotNull PsiElement context, @NotNull Document copyDocument, int newOffset) {
-    PsiElement topmostExpression = myPsiInfo.getTopmostExpression(context);
-    return topmostExpression != null && myTypeChecker.value(topmostExpression);
-  }
-
-  @Override
   protected void doIt(@NotNull Editor editor, @NotNull PsiElement context) {
-    PsiElement expr = myPsiInfo.getTopmostExpression(context);
-    assert expr != null;
     Project project = context.getProject();
     Document document = editor.getDocument();
-    PsiElement elementForRemoving = shouldRemoveParent() ? expr.getParent() : expr;
-    document.deleteString(elementForRemoving.getTextRange().getStartOffset(),
-                          elementForRemoving.getTextRange().getEndOffset());
+    document.deleteString(context.getTextRange().getStartOffset(), context.getTextRange().getEndOffset());
     TemplateManager manager = TemplateManager.getInstance(project);
 
-    String templateString = getTemplateString(expr);
+    String templateString = getTemplateString(context);
     if (templateString == null) {
-      PostfixTemplatesUtils.showErrorHint(expr.getProject(), editor);
+      PostfixTemplatesUtils.showErrorHint(context.getProject(), editor);
       return;
     }
 
     Template template = createTemplate(manager, templateString);
 
-    if (shouldAddExpressionToContext()) {
-      template.addVariable("expr", new TextExpression(expr.getText()), false);
+    if (shouldUseStaticImportIfPossible()) {
+      template.setValue(Template.Property.USE_STATIC_IMPORT_IF_POSSIBLE, true);
     }
 
-    setVariables(template, expr);
+    if (shouldAddExpressionToContext()) {
+      template.addVariable("expr", new TextExpression(context.getText()), false);
+    }
+
+    setVariables(template, context);
     manager.startTemplate(editor, template);
   }
 
@@ -85,8 +83,23 @@ public abstract class StringBasedJavaPostfixTemplateWithChooser extends JavaPost
     return true;
   }
 
-  protected boolean shouldRemoveParent() {
-    return true;
+  protected boolean shouldUseStaticImportIfPossible() {
+    return false;
   }
 
+  protected String getStaticMethodPrefix(@NotNull GuavaClassName className,
+                                         @NotNull String methodName,
+                                         @NotNull PsiElement context) {
+    return getStaticMethodPrefix(className.getClassName(), methodName, context);
+  }
+
+  protected String getStaticMethodPrefix(@NotNull String className,
+                                         @NotNull String methodName,
+                                         @NotNull PsiElement context) {
+    if (shouldUseStaticImportIfPossible()) {
+      return className + "." + methodName;
+    } else {
+      return GuavaPostfixTemplatesUtils.getStaticMethodPrefix(className, methodName, context);
+    }
+  }
 }

@@ -17,7 +17,6 @@ package uk.co.drache.intellij.codeinsight.postfix.templates;
 
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.impl.TextExpression;
-import com.intellij.codeInsight.template.postfix.templates.StringBasedPostfixTemplate;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 
@@ -27,14 +26,13 @@ import static com.intellij.codeInsight.template.postfix.templates.ForIndexedPost
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.PRECONDITIONS;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.getExpressionNumberOrArrayOrIterableBound;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.getStaticMethodPrefix;
 
 /**
  * Postfix template for guava {@code com.google.common.base.Preconditions#checkPositionIndex(int, int)}.
  *
  * @author Bob Browning
  */
-public class CheckPositionIndexPostfixTemplate extends StringBasedPostfixTemplate {
+public class CheckPositionIndexPostfixTemplate extends RichStringBasedPostfixTemplate {
 
   public CheckPositionIndexPostfixTemplate() {
     super("checkPositionIndex", "checkPositionIndex(index, size)", JAVA_PSI_INFO, IS_NUMBER_OR_ARRAY_OR_ITERABLE);
@@ -59,8 +57,7 @@ public class CheckPositionIndexPostfixTemplate extends StringBasedPostfixTemplat
 
   @NotNull
   private String getStringTemplate(@NotNull PsiExpression expr) {
-    return getStaticMethodPrefix(PRECONDITIONS.getClassName(), "checkPositionIndex", expr)
-           + "($index$, $bound$);$END$";
+    return getStaticMethodPrefix(PRECONDITIONS, "checkPositionIndex", expr) + "($index$, $bound$);$END$";
   }
 
   @Override
@@ -68,4 +65,8 @@ public class CheckPositionIndexPostfixTemplate extends StringBasedPostfixTemplat
     return false;
   }
 
+  @Override
+  protected boolean shouldUseStaticImportIfPossible() {
+    return true;
+  }
 }

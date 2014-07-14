@@ -29,6 +29,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.getTopmostExpression;
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.isArray;
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.isIterable;
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.isNumber;
@@ -137,5 +138,9 @@ public class GuavaPostfixTemplatesUtils {
   public static String getStaticMethodPrefix(@NotNull String fqClassName, @NotNull String methodName,
                                              @NotNull PsiElement context) {
     return hasImportStatic(fqClassName, methodName, context) ? methodName : (fqClassName + "." + methodName);
+  }
+
+  public static boolean isTopmostExpression(@NotNull PsiElement element) {
+    return element.equals(getTopmostExpression(element));
   }
 }
