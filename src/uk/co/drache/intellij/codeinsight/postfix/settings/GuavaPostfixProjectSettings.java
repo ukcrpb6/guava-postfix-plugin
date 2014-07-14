@@ -19,7 +19,7 @@ import java.io.File;
  * @author Bob Browning
  */
 @State(
-    name = "ScalaProjectSettings",
+    name = "GuavaPostfixProjectSettings",
     storages = {
         @Storage(file = "$WORKSPACE_FILE$"),
         @Storage(file = "$PROJECT_CONFIG_DIR$/guava_postfix_settings.xml", scheme = StorageScheme.DIRECTORY_BASED)
