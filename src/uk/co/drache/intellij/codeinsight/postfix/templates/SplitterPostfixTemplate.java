@@ -17,6 +17,7 @@ package uk.co.drache.intellij.codeinsight.postfix.templates;
 
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.impl.TextExpression;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 
 import org.jetbrains.annotations.NotNull;
@@ -49,4 +50,8 @@ public class SplitterPostfixTemplate extends StringBasedJavaPostfixTemplateWithC
            + (isTopmostExpression(element) ? ";$END$" : "$END$");
   }
 
+  @Override
+  protected boolean shouldUseStaticImportIfPossible(@NotNull Project project) {
+    return false;
+  }
 }

@@ -41,8 +41,4 @@ public class CheckNotNullPostfixTemplate extends StringBasedJavaPostfixTemplateW
            (isTopmostExpression(element) ? "($expr$);$END$" : "($expr$)$END$");
   }
 
-  @Override
-  protected boolean shouldUseStaticImportIfPossible() {
-    return true;
-  }
 }

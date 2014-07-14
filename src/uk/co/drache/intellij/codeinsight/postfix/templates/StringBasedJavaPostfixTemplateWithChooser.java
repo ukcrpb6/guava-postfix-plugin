@@ -12,10 +12,10 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElement;
 
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import uk.co.drache.intellij.codeinsight.postfix.settings.GuavaPostfixProjectSettings;
 import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName;
 import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils;
 
@@ -51,7 +51,7 @@ public abstract class StringBasedJavaPostfixTemplateWithChooser extends JavaPost
 
     Template template = createTemplate(manager, templateString);
 
-    if (shouldUseStaticImportIfPossible()) {
+    if (shouldUseStaticImportIfPossible(project)) {
       template.setValue(Template.Property.USE_STATIC_IMPORT_IF_POSSIBLE, true);
     }
 
@@ -83,8 +83,8 @@ public abstract class StringBasedJavaPostfixTemplateWithChooser extends JavaPost
     return true;
   }
 
-  protected boolean shouldUseStaticImportIfPossible() {
-    return false;
+  protected boolean shouldUseStaticImportIfPossible(@NotNull Project project) {
+    return GuavaPostfixProjectSettings.getInstance(project).isUseStaticImportIfPossible();
   }
 
   protected String getStaticMethodPrefix(@NotNull GuavaClassName className,
@@ -96,7 +96,7 @@ public abstract class StringBasedJavaPostfixTemplateWithChooser extends JavaPost
   protected String getStaticMethodPrefix(@NotNull String className,
                                          @NotNull String methodName,
                                          @NotNull PsiElement context) {
-    if (shouldUseStaticImportIfPossible()) {
+    if (shouldUseStaticImportIfPossible(context.getProject())) {
       return className + "." + methodName;
     } else {
       return GuavaPostfixTemplatesUtils.getStaticMethodPrefix(className, methodName, context);

@@ -15,6 +15,7 @@
  */
 package uk.co.drache.intellij.codeinsight.postfix.templates;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 
 import org.jetbrains.annotations.NotNull;
@@ -49,5 +50,11 @@ public abstract class ImmutableBasePostfixTemplate extends StringBasedJavaPostfi
   public String getTemplateString(@NotNull PsiElement element) {
     return getStaticMethodPrefix(className, methodName, element) +
            (isTopmostExpression(element) ? "($expr$);$END$" : "($expr$)$END$");
+  }
+
+
+  @Override
+  protected boolean shouldUseStaticImportIfPossible(@NotNull Project project) {
+    return false;
   }
 }

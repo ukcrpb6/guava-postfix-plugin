@@ -65,8 +65,4 @@ public class CheckPositionIndexPostfixTemplate extends RichStringBasedPostfixTem
     return false;
   }
 
-  @Override
-  protected boolean shouldUseStaticImportIfPossible() {
-    return true;
-  }
 }

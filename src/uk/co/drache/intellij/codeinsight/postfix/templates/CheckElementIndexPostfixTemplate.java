@@ -69,8 +69,4 @@ public class CheckElementIndexPostfixTemplate extends RichStringBasedPostfixTemp
     return false;
   }
 
-  @Override
-  protected boolean shouldUseStaticImportIfPossible() {
-    return true;
-  }
 }

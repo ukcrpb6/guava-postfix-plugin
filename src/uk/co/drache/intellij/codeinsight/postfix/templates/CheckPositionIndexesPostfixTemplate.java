@@ -71,8 +71,4 @@ public class CheckPositionIndexesPostfixTemplate extends RichStringBasedPostfixT
     return false;
   }
 
-  @Override
-  protected boolean shouldUseStaticImportIfPossible() {
-    return true;
-  }
 }

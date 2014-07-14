@@ -18,7 +18,6 @@ package uk.co.drache.intellij.codeinsight.postfix.templates;
 import com.intellij.psi.PsiElement;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_BOOLEAN;
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
@@ -45,8 +44,4 @@ public class CheckStatePostfixTemplate extends RichStringBasedPostfixTemplate {
     return false;
   }
 
-  @Override
-  protected boolean shouldUseStaticImportIfPossible() {
-    return true;
-  }
 }

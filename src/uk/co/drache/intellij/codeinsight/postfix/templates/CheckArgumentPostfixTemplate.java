@@ -46,8 +46,4 @@ public class CheckArgumentPostfixTemplate extends RichStringBasedPostfixTemplate
     return false;
   }
 
-  @Override
-  protected boolean shouldUseStaticImportIfPossible() {
-    return true;
-  }
 }
