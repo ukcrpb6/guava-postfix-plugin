@@ -21,6 +21,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 
 import org.jetbrains.annotations.NotNull;
+import uk.co.drache.intellij.codeinsight.postfix.internal.RichStringBasedPostfixTemplate;
 
 import static com.intellij.codeInsight.template.postfix.templates.ForIndexedPostfixTemplate.IS_NUMBER_OR_ARRAY_OR_ITERABLE;
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;

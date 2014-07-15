@@ -77,7 +77,7 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <codeInsight.template.postfixTemplateProvider language="JAVA"
-                                                  implementationClass="uk.co.drache.intellij.codeinsight.postfix.templates.GuavaPostfixTemplateProvider"/>
+                                                  implementationClass="uk.co.drache.intellij.codeinsight.postfix.GuavaPostfixTemplateProvider"/>
     <projectService serviceImplementation="uk.co.drache.intellij.codeinsight.postfix.settings.GuavaPostfixProjectSettings"/>
     <projectConfigurable instance="uk.co.drache.intellij.codeinsight.postfix.settings.GuavaPostfixProjectSettingsConfigurable"/>
   </extensions>
