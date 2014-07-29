@@ -15,17 +15,40 @@
  */
 package uk.co.drache.intellij.codeinsight.postfix;
 
+import com.intellij.codeInsight.template.postfix.templates.JavaPostfixTemplateProvider;
+import com.intellij.codeInsight.template.postfix.templates.PostfixTemplate;
 import com.intellij.util.containers.ContainerUtil;
-import uk.co.drache.intellij.codeinsight.postfix.internal.PatchedJavaPostfixTemplateProvider;
-import uk.co.drache.intellij.codeinsight.postfix.templates.*;
+
+import org.jetbrains.annotations.NotNull;
+
+import uk.co.drache.intellij.codeinsight.postfix.templates.CheckArgumentPostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.CheckElementIndexPostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.CheckNotNullPostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.CheckPositionIndexPostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.CheckPositionIndexesPostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.CheckStatePostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.FluentIterablePostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.ImmutableListCopyOfPostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.ImmutableListOfPostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.ImmutableSetCopyOfPostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.ImmutableSetOfPostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.JoinerPostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.SplitterPostfixTemplate;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
+ * Postfix template provider for extension point.
+ *
  * @author Bob Browning
  */
-public class GuavaPostfixTemplateProvider extends PatchedJavaPostfixTemplateProvider {
+public class GuavaPostfixTemplateProvider extends JavaPostfixTemplateProvider {
+
+  private final HashSet<PostfixTemplate> templates;
 
   public GuavaPostfixTemplateProvider() {
-    super(ContainerUtil.newHashSet(
+    templates = ContainerUtil.newHashSet(
         new CheckArgumentPostfixTemplate(),
         new CheckElementIndexPostfixTemplate(),
         new CheckNotNullPostfixTemplate(),
@@ -40,7 +63,12 @@ public class GuavaPostfixTemplateProvider extends PatchedJavaPostfixTemplateProv
         new ImmutableSetOfPostfixTemplate(),
         new JoinerPostfixTemplate(),
         new SplitterPostfixTemplate()
-    ));
+    );
   }
 
+  @NotNull
+  @Override
+  public Set<PostfixTemplate> getTemplates() {
+    return templates;
+  }
 }
