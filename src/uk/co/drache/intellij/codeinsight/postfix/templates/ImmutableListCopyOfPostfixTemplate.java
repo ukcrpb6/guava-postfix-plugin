@@ -16,6 +16,7 @@
 package uk.co.drache.intellij.codeinsight.postfix.templates;
 
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.IMMUTABLE_LIST;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.IS_NON_PRIMITIVE_ARRAY_OR_ITERABLE_OR_ITERATOR;
 
 /**
  * Postfix template for guava {@code com.google.common.collect.ImmutableList#copyOf(java.util.Collection)}.
@@ -25,7 +26,8 @@ import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.IMM
 public class ImmutableListCopyOfPostfixTemplate extends ImmutableBasePostfixTemplate {
 
   public ImmutableListCopyOfPostfixTemplate() {
-    super("immutableListCopyOf", "ImmutableList.copyOf(Collection|Array|Iterator|Iterable)", IMMUTABLE_LIST, "copyOf");
+    super("immutableListCopyOf", "ImmutableList.copyOf(Collection|Array|Iterator|Iterable)", IMMUTABLE_LIST, "copyOf",
+          IS_NON_PRIMITIVE_ARRAY_OR_ITERABLE_OR_ITERATOR);
   }
 
 }

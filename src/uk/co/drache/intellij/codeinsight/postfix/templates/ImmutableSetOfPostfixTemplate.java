@@ -15,6 +15,7 @@
  */
 package uk.co.drache.intellij.codeinsight.postfix.templates;
 
+import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_NON_VOID;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.IMMUTABLE_SET;
 
 /**
@@ -25,7 +26,7 @@ import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.IMM
 public class ImmutableSetOfPostfixTemplate extends ImmutableBasePostfixTemplate {
 
   public ImmutableSetOfPostfixTemplate() {
-    super("immutableSetOf", "ImmutableSet.of(Object)", IMMUTABLE_SET, "of");
+    super("immutableSetOf", "ImmutableSet.of(Object)", IMMUTABLE_SET, "of", IS_NON_VOID);
   }
 
 }

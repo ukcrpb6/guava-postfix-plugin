@@ -16,6 +16,7 @@
 package uk.co.drache.intellij.codeinsight.postfix.templates;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElement;
 
 import org.jetbrains.annotations.NotNull;
@@ -25,8 +26,6 @@ import uk.co.drache.intellij.codeinsight.postfix.internal.StringBasedJavaPostfix
 import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName;
 
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.IS_NON_PRIMITIVE_ARRAY_OR_ITERABLE_OR_ITERATOR;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.isTopmostExpression;
 
 /**
  * Postfix template for guava immutable .copyOf and .of methods.
@@ -40,8 +39,9 @@ public abstract class ImmutableBasePostfixTemplate extends StringBasedJavaPostfi
 
   protected ImmutableBasePostfixTemplate(@NotNull String key, @NotNull String example,
                                          @NotNull GuavaClassName className,
-                                         @NotNull String methodName) {
-    super(key, example, JAVA_PSI_INFO, IS_NON_PRIMITIVE_ARRAY_OR_ITERABLE_OR_ITERATOR);
+                                         @NotNull String methodName,
+                                         @NotNull Condition<PsiElement> typeChecker) {
+    super(key, example, JAVA_PSI_INFO, typeChecker);
     this.className = className;
     this.methodName = methodName;
   }

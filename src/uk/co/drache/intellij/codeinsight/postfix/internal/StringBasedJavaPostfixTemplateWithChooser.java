@@ -40,6 +40,7 @@ import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtil
 public abstract class StringBasedJavaPostfixTemplateWithChooser extends JavaPostfixTemplateWithChooser {
 
   protected final PostfixTemplatePsiInfo myPsiInfo;
+
   protected final Condition<PsiElement> myTypeChecker;
 
   protected StringBasedJavaPostfixTemplateWithChooser(@NotNull String name,
@@ -49,6 +50,12 @@ public abstract class StringBasedJavaPostfixTemplateWithChooser extends JavaPost
     super(name, example);
     this.myPsiInfo = psiInfo;
     this.myTypeChecker = typeChecker;
+  }
+
+  @NotNull
+  @Override
+  protected Condition<PsiElement> getTypeCondition() {
+    return myTypeChecker;
   }
 
   @Override
