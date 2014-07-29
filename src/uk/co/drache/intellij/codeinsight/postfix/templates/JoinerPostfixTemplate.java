@@ -41,8 +41,7 @@ public class JoinerPostfixTemplate extends StringBasedJavaPostfixTemplateWithCho
 
   @Override
   public void setVariables(@NotNull Template template, @NotNull PsiElement element) {
-    TextExpression on = new TextExpression("','");
-    template.addVariable("on", on, on, true);
+    template.addVariable("on", new TextExpression("','"), true);
   }
 
   @Override
