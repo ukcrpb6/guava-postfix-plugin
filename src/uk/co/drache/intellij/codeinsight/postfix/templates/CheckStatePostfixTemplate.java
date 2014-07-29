@@ -41,9 +41,4 @@ public class CheckStatePostfixTemplate extends RichStringBasedPostfixTemplate {
     return getStaticMethodPrefix(PRECONDITIONS, "checkState", element) + "($expr$);$END$";
   }
 
-  @Override
-  protected boolean shouldRemoveParent() {
-    return false;
-  }
-
 }

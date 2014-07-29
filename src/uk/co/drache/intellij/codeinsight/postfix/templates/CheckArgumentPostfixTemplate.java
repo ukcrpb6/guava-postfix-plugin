@@ -43,9 +43,4 @@ public class CheckArgumentPostfixTemplate extends RichStringBasedPostfixTemplate
     return getStaticMethodPrefix(PRECONDITIONS, "checkArgument", element) + "($expr$);$END$";
   }
 
-  @Override
-  protected boolean shouldRemoveParent() {
-    return false;
-  }
-
 }
