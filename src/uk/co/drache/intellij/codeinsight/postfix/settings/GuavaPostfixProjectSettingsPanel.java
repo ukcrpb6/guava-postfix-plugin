@@ -8,6 +8,8 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 /**
+ * Settings panel for plugin.
+ *
  * @author Bob Browning
  */
 public class GuavaPostfixProjectSettingsPanel {
@@ -22,7 +24,6 @@ public class GuavaPostfixProjectSettingsPanel {
     box.setSelected(value);
   }
 
-  private final Project project;
   private final GuavaPostfixProjectSettings settings;
 
   private JCheckBox useStaticImportIfPossible;
@@ -30,20 +31,28 @@ public class GuavaPostfixProjectSettingsPanel {
   private JPanel panel;
 
   public GuavaPostfixProjectSettingsPanel(@NotNull Project project) {
-    this.project = project;
     this.settings = GuavaPostfixProjectSettings.getInstance(project);
     reset();
   }
 
+  /**
+   * Returns the wired configuration settings panel.
+   */
   @Nullable
   public JComponent getPanel() {
     return panel;
   }
 
+  /**
+   * Returns true if the settings have been modified.
+   */
   public boolean isModified() {
     return settings.isUseStaticImportIfPossible() != useStaticImportIfPossible.isSelected();
   }
 
+  /**
+   * Applies the current state to the configured project settings, if modified.
+   */
   public void apply() {
     if (!isModified()) {
       return;
@@ -52,6 +61,9 @@ public class GuavaPostfixProjectSettingsPanel {
     settings.setUseStaticImportIfPossible(useStaticImportIfPossible.isSelected());
   }
 
+  /**
+   * Resets the current state to the configured project settings.
+   */
   public void reset() {
     setValue(useStaticImportIfPossible, settings.isUseStaticImportIfPossible());
   }

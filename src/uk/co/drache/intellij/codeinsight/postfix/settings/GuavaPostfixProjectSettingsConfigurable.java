@@ -26,6 +26,8 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 /**
+ * Configurable project settings for plugin.
+ *
  * @author Bob Browning
  */
 public class GuavaPostfixProjectSettingsConfigurable implements Configurable {

@@ -31,6 +31,8 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 
 /**
+ * Project settings for the plugin.
+ *
  * @author Bob Browning
  */
 @State(
@@ -43,6 +45,7 @@ import java.io.File;
 public class GuavaPostfixProjectSettings
     implements PersistentStateComponent<GuavaPostfixProjectSettings>, ExportableComponent {
 
+  @NotNull
   public static GuavaPostfixProjectSettings getInstance(@NotNull Project project) {
     GuavaPostfixProjectSettings service = ServiceManager.getService(project, GuavaPostfixProjectSettings.class);
     return service == null ? new GuavaPostfixProjectSettings() : service;
