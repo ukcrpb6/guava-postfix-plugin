@@ -57,6 +57,20 @@ public class GuavaPostfixTemplatesUtils {
   };
 
   /**
+   * Condition that returns true if the element is an iterator.
+   */
+  public static final Condition<PsiElement> IS_ITERATOR = new Condition<PsiElement>() {
+    @Override
+    public boolean value(PsiElement element) {
+      if (element instanceof PsiExpression) {
+        PsiType type = ((PsiExpression) element).getType();
+        return isIterator(type);
+      }
+      return false;
+    }
+  };
+
+  /**
    * Condition that returns true if the element is an iterable or an iterator or an array.
    */
   public static final Condition<PsiElement> IS_ARRAY_OR_ITERABLE_OR_ITERATOR = new Condition<PsiElement>() {
