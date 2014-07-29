@@ -21,12 +21,12 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 
 import org.jetbrains.annotations.NotNull;
+
 import uk.co.drache.intellij.codeinsight.postfix.internal.StringBasedJavaPostfixTemplateWithChooser;
 
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.JOINER;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.IS_ARRAY_OR_ITERABLE_OR_ITERATOR;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.isTopmostExpression;
 
 /**
  * Postfix template for guava {@code com.google.common.base.Splitter}.
@@ -47,8 +47,7 @@ public class JoinerPostfixTemplate extends StringBasedJavaPostfixTemplateWithCho
 
   @Override
   public final String getTemplateString(@NotNull PsiElement element) {
-    return getStaticMethodPrefix(JOINER, "on", element) + "($on$).join($expr$)" +
-           (isTopmostExpression(element) ? ";$END$" : "$END$");
+    return getStaticMethodPrefix(JOINER, "on", element) + "($on$).join($expr$)$EOS$";
   }
 
   @Override

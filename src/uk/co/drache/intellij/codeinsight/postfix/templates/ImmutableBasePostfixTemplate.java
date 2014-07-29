@@ -49,8 +49,7 @@ public abstract class ImmutableBasePostfixTemplate extends StringBasedJavaPostfi
   @Nullable
   @Override
   public String getTemplateString(@NotNull PsiElement element) {
-    return getStaticMethodPrefix(className, methodName, element) +
-           (isTopmostExpression(element) ? "($expr$);$END$" : "($expr$)$END$");
+    return getStaticMethodPrefix(className, methodName, element) + "($expr$)$EOS$";
   }
 
 

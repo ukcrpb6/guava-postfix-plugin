@@ -66,6 +66,8 @@ public abstract class StringBasedJavaPostfixTemplateWithChooser extends JavaPost
       return;
     }
 
+    templateString = templateString.replace("$EOS$", GuavaPostfixTemplatesUtils.isSemicolonNeeded(context) ? ";$END$" : "$END$");
+
     Template template = createTemplate(manager, templateString);
 
     if (shouldUseStaticImportIfPossible(project)) {

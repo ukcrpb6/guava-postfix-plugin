@@ -21,12 +21,12 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 
 import org.jetbrains.annotations.NotNull;
+
 import uk.co.drache.intellij.codeinsight.postfix.internal.StringBasedJavaPostfixTemplateWithChooser;
 
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.SPLITTER;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.IS_CHAR_SEQUENCE;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.isTopmostExpression;
 
 /**
  * Postfix template for guava {@code com.google.common.base.Splitter}.
@@ -47,8 +47,7 @@ public class SplitterPostfixTemplate extends StringBasedJavaPostfixTemplateWithC
 
   @Override
   public final String getTemplateString(@NotNull PsiElement element) {
-    return getStaticMethodPrefix(SPLITTER, "on", element) + "($on$).split($expr$)"
-           + (isTopmostExpression(element) ? ";$END$" : "$END$");
+    return getStaticMethodPrefix(SPLITTER, "on", element) + "($on$).split($expr$)$EOS$";
   }
 
   @Override

@@ -19,10 +19,13 @@ import com.intellij.openapi.util.Condition;
 import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiArrayType;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiPrimitiveType;
+import com.intellij.psi.PsiStatement;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.psi.util.PsiTreeUtil;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
@@ -142,5 +145,10 @@ public class GuavaPostfixTemplatesUtils {
 
   public static boolean isTopmostExpression(@NotNull PsiElement element) {
     return element.equals(getTopmostExpression(element));
+  }
+
+  public static boolean isSemicolonNeeded(PsiElement context) {
+    PsiStatement statement = PsiTreeUtil.getParentOfType(context, PsiStatement.class);
+    return statement != null && statement.getLastChild() instanceof PsiErrorElement;
   }
 }
