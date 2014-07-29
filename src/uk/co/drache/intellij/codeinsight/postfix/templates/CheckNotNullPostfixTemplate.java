@@ -18,12 +18,12 @@ package uk.co.drache.intellij.codeinsight.postfix.templates;
 import com.intellij.psi.PsiElement;
 
 import org.jetbrains.annotations.NotNull;
+
 import uk.co.drache.intellij.codeinsight.postfix.internal.StringBasedJavaPostfixTemplateWithChooser;
 
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_NOT_PRIMITIVE;
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.PRECONDITIONS;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.isTopmostExpression;
 
 /**
  * Postfix template for guava {@code com.google.common.base.Preconditions#checkNotNull(Object)}.
@@ -42,8 +42,7 @@ public class CheckNotNullPostfixTemplate extends StringBasedJavaPostfixTemplateW
 
   @Override
   public String getTemplateString(@NotNull PsiElement element) {
-    return getStaticMethodPrefix(PRECONDITIONS, "checkNotNull", element) +
-        (isTopmostExpression(element) ? "($expr$);$END$" : "($expr$)$END$");
+    return getStaticMethodPrefix(PRECONDITIONS, "checkNotNull", element) + "($expr$)$EOS$";
   }
 
 }
