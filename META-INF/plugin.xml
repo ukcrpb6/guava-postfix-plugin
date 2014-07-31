@@ -60,6 +60,10 @@
       <ul>
         <li> <b>.fluentIterable</b><br/><em>Creates a fluent iterable that wraps iterable, or iterable itself if it is already a FluentIterable</em><br/><b>FluentIterable.from(Iterable)</b></li>
       </ul>
+
+      <ul>
+        <li> <b>.optional</b><br/><em>Creates an optional around the element, if variable is annotated as @Nullable then .fromNullable will be used, .of otherwise</em><br/><b>Optional.of(Object)</b></li>
+      </ul>
     ]]></description>
 
   <change-notes><![CDATA[
