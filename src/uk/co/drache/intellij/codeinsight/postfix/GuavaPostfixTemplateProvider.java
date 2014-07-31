@@ -33,6 +33,7 @@ import uk.co.drache.intellij.codeinsight.postfix.templates.ImmutableListOfPostfi
 import uk.co.drache.intellij.codeinsight.postfix.templates.ImmutableSetCopyOfPostfixTemplate;
 import uk.co.drache.intellij.codeinsight.postfix.templates.ImmutableSetOfPostfixTemplate;
 import uk.co.drache.intellij.codeinsight.postfix.templates.JoinerPostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.OptionalPostfixTemplate;
 import uk.co.drache.intellij.codeinsight.postfix.templates.SplitterPostfixTemplate;
 
 import java.util.HashSet;
@@ -62,7 +63,8 @@ public class GuavaPostfixTemplateProvider extends JavaPostfixTemplateProvider {
         new ImmutableSetCopyOfPostfixTemplate(),
         new ImmutableSetOfPostfixTemplate(),
         new JoinerPostfixTemplate(),
-        new SplitterPostfixTemplate()
+        new SplitterPostfixTemplate(),
+        new OptionalPostfixTemplate()
     );
   }
 
