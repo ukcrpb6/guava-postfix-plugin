@@ -58,7 +58,12 @@ public enum GuavaClassName {
   /**
    * {@link com.google.common.base.Preconditions}.
    */
-  PRECONDITIONS("com.google.common.base.Preconditions");
+  PRECONDITIONS("com.google.common.base.Preconditions"),
+
+  /**
+   * {@link com.google.common.base.Optional}.
+   */
+  OPTIONAL("com.google.common.base.Optional");
 
   private final String fqClassName;
 
