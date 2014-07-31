@@ -18,6 +18,7 @@ package uk.co.drache.intellij.codeinsight.postfix.templates;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.impl.TextExpression;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Conditions;
 import com.intellij.psi.PsiElement;
 
 import org.jetbrains.annotations.NotNull;
@@ -27,6 +28,7 @@ import uk.co.drache.intellij.codeinsight.postfix.internal.StringBasedJavaPostfix
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.JOINER;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.IS_ARRAY_OR_ITERABLE_OR_ITERATOR;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.IS_MAP;
 
 /**
  * Postfix template for guava {@code com.google.common.base.Splitter}.
@@ -36,21 +38,35 @@ import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTempla
 public class JoinerPostfixTemplate extends StringBasedJavaPostfixTemplateWithChooser {
 
   public JoinerPostfixTemplate() {
-    super("join", "Joiner.on(',').join(parts)", JAVA_PSI_INFO, IS_ARRAY_OR_ITERABLE_OR_ITERATOR);
+    super("join", "Joiner.on(',').join(parts)", JAVA_PSI_INFO, Conditions.or(IS_ARRAY_OR_ITERABLE_OR_ITERATOR, IS_MAP));
   }
 
   @Override
   public void setVariables(@NotNull Template template, @NotNull PsiElement element) {
-    template.addVariable("on", new TextExpression("','"), true);
+    if (isMap(element)) {
+      template.addVariable("on", new TextExpression("'&'"), true);
+      template.addVariable("separator", new TextExpression("\"=\""), true);
+    } else {
+      template.addVariable("on", new TextExpression("','"), true);
+    }
   }
 
   @Override
   public final String getTemplateString(@NotNull PsiElement element) {
-    return getStaticMethodPrefix(JOINER, "on", element) + "($on$).join($expr$)$EOS$";
+    if (isMap(element)) {
+      return getStaticMethodPrefix(JOINER, "on", element)
+             + "($on$).withKeyValueSeparator($separator$).join($expr$)$EOS$";
+    } else {
+      return getStaticMethodPrefix(JOINER, "on", element) + "($on$).join($expr$)$EOS$";
+    }
   }
 
   @Override
   protected boolean shouldUseStaticImportIfPossible(@NotNull Project project) {
     return false;
+  }
+
+  private static boolean isMap(PsiElement element) {
+    return IS_MAP.value(element);
   }
 }

@@ -17,7 +17,10 @@ package uk.co.drache.intellij.codeinsight.postfix.utils;
 
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.CommonClassNames;
+import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiArrayType;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.PsiExpression;
@@ -53,6 +56,17 @@ public class GuavaPostfixTemplatesUtils {
     public boolean value(PsiElement element) {
       return element instanceof PsiExpression
              && isCharSequence(((PsiExpression) element).getType());
+    }
+  };
+
+  /**
+   * Condition that returns true if the element is a {@link java.util.Map}.
+   */
+  public static final Condition<PsiElement> IS_MAP = new Condition<PsiElement>() {
+    @Override
+    public boolean value(PsiElement element) {
+      return element instanceof PsiExpression
+             && InheritanceUtil.isInheritor(((PsiExpression) element).getType(), CommonClassNames.JAVA_UTIL_MAP);
     }
   };
 
@@ -148,7 +162,8 @@ public class GuavaPostfixTemplatesUtils {
 
   /**
    * Get the prefix required for the specified imported static method within the current context.
-   *  @param fqClassName The qualified class name
+   *
+   * @param fqClassName The qualified class name
    * @param methodName  The method name
    * @param context     The current context
    */
@@ -161,6 +176,7 @@ public class GuavaPostfixTemplatesUtils {
     return element.equals(getTopmostExpression(element));
   }
 
+  @Contract("null -> false")
   public static boolean isSemicolonNeeded(PsiElement context) {
     PsiStatement statement = PsiTreeUtil.getParentOfType(context, PsiStatement.class);
     return statement != null && statement.getLastChild() instanceof PsiErrorElement;
