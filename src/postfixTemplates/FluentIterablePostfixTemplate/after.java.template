@@ -1,4 +1,4 @@
-import com.google.collect.FluentIterable;
+import com.google.common.collect.FluentIterable;
 
 public class Foo {
   void m(Iterable<Object> iterable) {

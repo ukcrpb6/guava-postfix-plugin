@@ -1,4 +1,4 @@
-import static com.google.collect.ImmutableList;
+import static com.google.common.collect.ImmutableList;
 
 public class Foo {
   void m(Object object) {

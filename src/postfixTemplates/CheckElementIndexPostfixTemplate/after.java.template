@@ -1,4 +1,4 @@
-import com.google.common.Preconditions;
+import com.google.common.base.Preconditions;
 
 public class Foo {
   void m(int[] arr) {
