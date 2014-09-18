@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.co.drache.intellij.codeinsight.postfix.templates;
+package uk.co.drache.intellij.codeinsight.postfix.templates.surround;
 
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_NON_VOID;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.IMMUTABLE_LIST;

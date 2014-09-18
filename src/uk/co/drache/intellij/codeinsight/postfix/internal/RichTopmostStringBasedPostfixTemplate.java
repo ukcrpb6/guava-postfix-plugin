@@ -19,8 +19,8 @@ import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.codeInsight.template.impl.TextExpression;
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplatePsiInfo;
+import com.intellij.codeInsight.template.postfix.templates.PostfixTemplateWithExpressionSelector;
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplatesUtils;
-import com.intellij.codeInsight.template.postfix.templates.TypedPostfixTemplate;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -37,20 +37,18 @@ import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtil
 /**
  * @author Bob Browning
  */
-public abstract class RichStringBasedPostfixTemplate extends TypedPostfixTemplate {
+public abstract class RichTopmostStringBasedPostfixTemplate extends PostfixTemplateWithExpressionSelector {
 
-  protected RichStringBasedPostfixTemplate(@NotNull String name,
-                                           @NotNull String example,
-                                           @NotNull PostfixTemplatePsiInfo psiInfo,
-                                           @NotNull Condition<PsiElement> typeChecker) {
+  protected RichTopmostStringBasedPostfixTemplate(@NotNull String name,
+                                                  @NotNull String example,
+                                                  @NotNull PostfixTemplatePsiInfo psiInfo,
+                                                  @NotNull Condition<PsiElement> typeChecker) {
     super(name, example, psiInfo, typeChecker);
   }
 
   @Override
-  public final void expand(@NotNull PsiElement context, @NotNull Editor editor) {
-    PsiElement expr = myPsiInfo.getTopmostExpression(context);
-    assert expr != null;
-    Project project = context.getProject();
+  protected final void expandForChooseExpression(@NotNull PsiElement expr, @NotNull Editor editor) {
+    Project project = expr.getProject();
     Document document = editor.getDocument();
     PsiElement elementForRemoving = shouldRemoveParent() ? expr.getParent() : expr;
     document.deleteString(elementForRemoving.getTextRange().getStartOffset(),
@@ -88,7 +86,7 @@ public abstract class RichStringBasedPostfixTemplate extends TypedPostfixTemplat
   }
 
   protected boolean shouldRemoveParent() {
-    return true;
+    return false;
   }
 
   public Template createTemplate(Project project, TemplateManager manager, String templateString) {

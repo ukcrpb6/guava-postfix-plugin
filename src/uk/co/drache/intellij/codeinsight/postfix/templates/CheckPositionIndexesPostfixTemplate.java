@@ -23,7 +23,7 @@ import com.intellij.psi.PsiExpression;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-import uk.co.drache.intellij.codeinsight.postfix.internal.RichStringBasedPostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.internal.RichTopmostStringBasedPostfixTemplate;
 
 import static com.intellij.codeInsight.template.postfix.templates.ForIndexedPostfixTemplate.IS_NUMBER_OR_ARRAY_OR_ITERABLE;
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
@@ -35,7 +35,7 @@ import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTempla
  *
  * @author Bob Browning
  */
-public class CheckPositionIndexesPostfixTemplate extends RichStringBasedPostfixTemplate {
+public class CheckPositionIndexesPostfixTemplate extends RichTopmostStringBasedPostfixTemplate {
 
   @NonNls
   private static final String EXAMPLE = "Preconditions.checkPositionIndexes(start, end, size)";

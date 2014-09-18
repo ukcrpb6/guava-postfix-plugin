@@ -13,20 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.co.drache.intellij.codeinsight.postfix.templates;
+package uk.co.drache.intellij.codeinsight.postfix.templates.surround;
 
-import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_NON_VOID;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.IMMUTABLE_SET;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.IS_NON_PRIMITIVE_ARRAY_OR_ITERABLE_OR_ITERATOR;
 
 /**
- * Postfix template for guava {@code com.google.common.collect.ImmutableSet#of(Object)}.
+ * Postfix template for guava {@code com.google.common.collect.ImmutableSet#copyOf(java.util.Collection)}.
  *
  * @author Bob Browning
  */
-public class ImmutableSetOfPostfixTemplate extends ImmutableBasePostfixTemplate {
+public class ImmutableSetCopyOfPostfixTemplate extends ImmutableBasePostfixTemplate {
 
-  public ImmutableSetOfPostfixTemplate() {
-    super("immutableSetOf", "ImmutableSet.of(Object)", IMMUTABLE_SET, "of", IS_NON_VOID);
+  public ImmutableSetCopyOfPostfixTemplate() {
+    super("immutableSetCopyOf", "ImmutableSet.copyOf(Collection|Array|Iterator|Iterable)", IMMUTABLE_SET, "copyOf",
+          IS_NON_PRIMITIVE_ARRAY_OR_ITERABLE_OR_ITERATOR);
   }
 
 }

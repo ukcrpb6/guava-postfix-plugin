@@ -15,20 +15,21 @@
  */
 package uk.co.drache.intellij.codeinsight.postfix.utils;
 
+import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.CommonClassNames;
-import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiArrayType;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.psi.PsiPrimitiveType;
+import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.psi.PsiStatement;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.siyeh.ig.psiutils.ParenthesesUtils;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
@@ -71,14 +72,14 @@ public class GuavaPostfixTemplatesUtils {
   };
 
   /**
-   * Condition that returns true if the element is an iterator.
+   * Condition that returns true if the element is an iterable.
    */
-  public static final Condition<PsiElement> IS_ITERATOR = new Condition<PsiElement>() {
+  public static final Condition<PsiElement> IS_ITERABLE = new Condition<PsiElement>() {
     @Override
     public boolean value(PsiElement element) {
       if (element instanceof PsiExpression) {
         PsiType type = ((PsiExpression) element).getType();
-        return isIterator(type);
+        return isIterable(type);
       }
       return false;
     }
@@ -180,5 +181,28 @@ public class GuavaPostfixTemplatesUtils {
   public static boolean isSemicolonNeeded(PsiElement context) {
     PsiStatement statement = PsiTreeUtil.getParentOfType(context, PsiStatement.class);
     return statement != null && statement.getLastChild() instanceof PsiErrorElement;
+  }
+
+  public static boolean isAnnotatedNullable(PsiElement element) {
+    PsiExpression expression;
+    if (element instanceof PsiExpression) {
+      expression = (PsiExpression) element;
+    } else {
+      expression = PsiTreeUtil.getParentOfType(element, PsiExpression.class, true);
+      if (expression == null) {
+        return false;
+      }
+    }
+    expression = ParenthesesUtils.stripParentheses(expression);
+    if (!(expression instanceof PsiReferenceExpression)) {
+      return false;
+    }
+    final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) expression;
+    final PsiElement target = referenceExpression.resolve();
+    if (!(target instanceof PsiModifierListOwner)) {
+      return false;
+    }
+    final PsiModifierListOwner modifierListOwner = (PsiModifierListOwner) target;
+    return NullableNotNullManager.isNullable(modifierListOwner);
   }
 }

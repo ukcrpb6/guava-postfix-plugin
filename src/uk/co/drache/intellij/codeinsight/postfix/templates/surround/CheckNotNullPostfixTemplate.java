@@ -13,36 +13,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.co.drache.intellij.codeinsight.postfix.templates;
+package uk.co.drache.intellij.codeinsight.postfix.templates.surround;
 
+import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElement;
 
 import org.jetbrains.annotations.NotNull;
 
-import uk.co.drache.intellij.codeinsight.postfix.internal.StringBasedJavaPostfixTemplateWithChooser;
+import uk.co.drache.intellij.codeinsight.postfix.internal.RichChooserStringBasedPostfixTemplate;
 
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_NOT_PRIMITIVE;
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.PRECONDITIONS;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.isAnnotatedNullable;
 
 /**
  * Postfix template for guava {@code com.google.common.base.Preconditions#checkNotNull(Object)}.
  *
  * @author Bob Browning
  */
-public class CheckNotNullPostfixTemplate extends StringBasedJavaPostfixTemplateWithChooser {
+public class CheckNotNullPostfixTemplate extends RichChooserStringBasedPostfixTemplate {
+
+  public static final Condition<PsiElement> IS_NON_NULL_OBJECT = new Condition<PsiElement>() {
+    @Override
+    public boolean value(PsiElement element) {
+      return IS_NOT_PRIMITIVE.value(element) && !isAnnotatedNullable(element);
+    }
+  };
 
   public CheckNotNullPostfixTemplate() {
     this("checkNotNull");
   }
 
   public CheckNotNullPostfixTemplate(@NotNull String alias) {
-    super(alias, "Preconditions.checkNotNull(expr)", JAVA_PSI_INFO, IS_NOT_PRIMITIVE);
+    super(alias, "Preconditions.checkNotNull(expr)", JAVA_PSI_INFO, IS_NON_NULL_OBJECT);
   }
 
   @Override
   public String getTemplateString(@NotNull PsiElement element) {
-    return getStaticMethodPrefix(PRECONDITIONS, "checkNotNull", element) + "($expr$)$EOS$";
+    return getStaticMethodPrefix(PRECONDITIONS, "checkNotNull", element) + "($expr$)$END$";
   }
 
 }

@@ -13,15 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.co.drache.intellij.codeinsight.postfix.templates;
+package uk.co.drache.intellij.codeinsight.postfix.templates.surround;
+
+import uk.co.drache.intellij.codeinsight.postfix.templates.BasePostfixTemplateTest;
 
 /**
+ * Test for {@link OptionalPostfixTemplateTest}.
+ *
  * @author Bob Browning
  */
-public class CheckNotNullPostfixTemplateTest extends BasePostfixTemplateTest {
+public class OptionalPostfixTemplateTest extends BasePostfixTemplateTest {
 
-  public CheckNotNullPostfixTemplateTest() {
-    super("testData/templates/checknotnull");
+  public OptionalPostfixTemplateTest() {
+    super("testData/templates/optional");
   }
 
+  public void testNonNullExpression() throws Exception {
+    doTest();
+  }
+
+  public void testNonAnnotatedExpression() throws Exception {
+    doTest();
+  }
 }

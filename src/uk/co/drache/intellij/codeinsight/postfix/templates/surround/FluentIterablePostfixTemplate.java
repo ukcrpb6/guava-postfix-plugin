@@ -13,51 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.co.drache.intellij.codeinsight.postfix.templates;
+package uk.co.drache.intellij.codeinsight.postfix.templates.surround;
 
-import com.intellij.codeInsight.template.postfix.templates.ExpressionPostfixTemplateWithChooser;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.Condition;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import uk.co.drache.intellij.codeinsight.postfix.internal.RichChooserStringBasedPostfixTemplate;
 
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
-import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.isIterable;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.FLUENT_ITERABLE;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.IS_ITERABLE;
 
 /**
  * Postfix template for guava {@code com.google.common.collect.FluentIterable#from(Iterable)}.
  *
  * @author Bob Browning
  */
-public class FluentIterablePostfixTemplate extends ExpressionPostfixTemplateWithChooser {
+public class FluentIterablePostfixTemplate extends RichChooserStringBasedPostfixTemplate {
 
   @NonNls
   private static final String FQ_METHOD_FROM = FLUENT_ITERABLE.getQualifiedStaticMethodName("from");
 
   public FluentIterablePostfixTemplate() {
-    super("fluentIterable", "FluentIterable.from(iterable)", JAVA_PSI_INFO);
+    super("fluentIterable", "FluentIterable.from(iterable)", JAVA_PSI_INFO, IS_ITERABLE);
+  }
+
+  @Nullable
+  @Override
+  public String getTemplateString(@NotNull PsiElement element) {
+    return FQ_METHOD_FROM + "($expr$)$END$";
   }
 
   @Override
-  protected void doIt(@NotNull Editor editor, @NotNull PsiElement element) {
-    PsiElement replacement = myInfo.createExpression(element, FQ_METHOD_FROM + "(", ")");
-    JavaCodeStyleManager.getInstance(element.getProject()).shortenClassReferences(replacement);
-    element.replace(replacement);
-  }
-
-  @NotNull
-  @Override
-  protected Condition<PsiElement> getTypeCondition() {
-    return new Condition<PsiElement>() {
-      @Override
-      public boolean value(PsiElement element) {
-        return element instanceof PsiExpression && isIterable(((PsiExpression) element).getType());
-      }
-    };
+  protected boolean shouldUseStaticImportIfPossible(Project project) {
+    return false;
   }
 }

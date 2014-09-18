@@ -23,18 +23,18 @@ import org.jetbrains.annotations.NotNull;
 
 import uk.co.drache.intellij.codeinsight.postfix.templates.CheckArgumentPostfixTemplate;
 import uk.co.drache.intellij.codeinsight.postfix.templates.CheckElementIndexPostfixTemplate;
-import uk.co.drache.intellij.codeinsight.postfix.templates.CheckNotNullPostfixTemplate;
 import uk.co.drache.intellij.codeinsight.postfix.templates.CheckPositionIndexPostfixTemplate;
 import uk.co.drache.intellij.codeinsight.postfix.templates.CheckPositionIndexesPostfixTemplate;
 import uk.co.drache.intellij.codeinsight.postfix.templates.CheckStatePostfixTemplate;
-import uk.co.drache.intellij.codeinsight.postfix.templates.FluentIterablePostfixTemplate;
-import uk.co.drache.intellij.codeinsight.postfix.templates.ImmutableListCopyOfPostfixTemplate;
-import uk.co.drache.intellij.codeinsight.postfix.templates.ImmutableListOfPostfixTemplate;
-import uk.co.drache.intellij.codeinsight.postfix.templates.ImmutableSetCopyOfPostfixTemplate;
-import uk.co.drache.intellij.codeinsight.postfix.templates.ImmutableSetOfPostfixTemplate;
-import uk.co.drache.intellij.codeinsight.postfix.templates.JoinerPostfixTemplate;
-import uk.co.drache.intellij.codeinsight.postfix.templates.OptionalPostfixTemplate;
-import uk.co.drache.intellij.codeinsight.postfix.templates.SplitterPostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.surround.CheckNotNullPostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.surround.FluentIterablePostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.surround.ImmutableListCopyOfPostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.surround.ImmutableListOfPostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.surround.ImmutableSetCopyOfPostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.surround.ImmutableSetOfPostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.surround.JoinerPostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.surround.OptionalPostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.surround.SplitterPostfixTemplate;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -49,7 +49,7 @@ public class GuavaPostfixTemplateProvider extends JavaPostfixTemplateProvider {
   private final HashSet<PostfixTemplate> templates;
 
   public GuavaPostfixTemplateProvider() {
-    templates = ContainerUtil.newHashSet(
+    templates = ContainerUtil.<PostfixTemplate>newHashSet(
         new CheckArgumentPostfixTemplate(),
         new CheckElementIndexPostfixTemplate(),
         new CheckNotNullPostfixTemplate(),

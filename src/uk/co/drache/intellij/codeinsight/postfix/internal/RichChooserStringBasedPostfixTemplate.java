@@ -18,8 +18,8 @@ package uk.co.drache.intellij.codeinsight.postfix.internal;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.codeInsight.template.impl.TextExpression;
-import com.intellij.codeInsight.template.postfix.templates.JavaPostfixTemplateWithChooser;
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplatePsiInfo;
+import com.intellij.codeInsight.template.postfix.templates.PostfixTemplateWithExpressionSelector;
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplatesUtils;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
@@ -37,62 +37,37 @@ import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtil
 /**
  * @author Bob Browning
  */
-public abstract class StringBasedJavaPostfixTemplateWithChooser extends JavaPostfixTemplateWithChooser {
+public abstract class RichChooserStringBasedPostfixTemplate extends PostfixTemplateWithExpressionSelector {
 
-  protected final PostfixTemplatePsiInfo myPsiInfo;
-
-  protected final Condition<PsiElement> myTypeChecker;
-
-  protected StringBasedJavaPostfixTemplateWithChooser(@NotNull String name,
-                                                      @NotNull String example,
-                                                      @NotNull PostfixTemplatePsiInfo psiInfo,
-                                                      @NotNull Condition<PsiElement> typeChecker) {
-    super(name, example);
-    this.myPsiInfo = psiInfo;
-    this.myTypeChecker = typeChecker;
-  }
-
-  @NotNull
-  @Override
-  protected Condition<PsiElement> getTypeCondition() {
-    return myTypeChecker;
+  protected RichChooserStringBasedPostfixTemplate(@NotNull String name,
+                                                  @NotNull String example,
+                                                  @NotNull PostfixTemplatePsiInfo psiInfo,
+                                                  @NotNull Condition<PsiElement> typeChecker) {
+    super(name, example, psiInfo, PostfixTemplatesUtils.selectorWithChooser(typeChecker));
   }
 
   @Override
-  protected void doIt(@NotNull Editor editor, @NotNull PsiElement context) {
-    final Project project = context.getProject();
+  protected final void expandForChooseExpression(@NotNull PsiElement expr, @NotNull Editor editor) {
+    Project project = expr.getProject();
     Document document = editor.getDocument();
-
-    document.deleteString(context.getTextRange().getStartOffset(), context.getTextRange().getEndOffset());
+    document.deleteString(expr.getTextRange().getStartOffset(), expr.getTextRange().getEndOffset());
 
     TemplateManager manager = TemplateManager.getInstance(project);
 
-    String templateString = getTemplateString(context);
+    String templateString = getTemplateString(expr);
     if (templateString == null) {
-      PostfixTemplatesUtils.showErrorHint(context.getProject(), editor);
+      PostfixTemplatesUtils.showErrorHint(expr.getProject(), editor);
       return;
     }
 
-    templateString = templateString.replace("$EOS$", GuavaPostfixTemplatesUtils.isSemicolonNeeded(context) ? ";$END$" : "$END$");
-
-    Template template = createTemplate(manager, templateString);
-
-    if (shouldUseStaticImportIfPossible(project)) {
-      template.setValue(Template.Property.USE_STATIC_IMPORT_IF_POSSIBLE, true);
-    }
+    Template template = createTemplate(project, manager, templateString);
 
     if (shouldAddExpressionToContext()) {
-      template.addVariable("expr", new TextExpression(context.getText()), false);
+      template.addVariable("expr", new TextExpression(expr.getText()), false);
     }
 
-    setVariables(template, context);
+    setVariables(template, expr);
     manager.startTemplate(editor, template);
-  }
-
-  public Template createTemplate(TemplateManager manager, String templateString) {
-    Template template = manager.createTemplate("", "", templateString);
-    template.setToReformat(shouldReformat());
-    return template;
   }
 
   public void setVariables(@NotNull Template template, @NotNull PsiElement element) {
@@ -109,7 +84,20 @@ public abstract class StringBasedJavaPostfixTemplateWithChooser extends JavaPost
     return true;
   }
 
-  protected boolean shouldUseStaticImportIfPossible(@NotNull Project project) {
+  public Template createTemplate(Project project, TemplateManager manager, String templateString) {
+    Template template = manager.createTemplate("", "", templateString);
+    template.setToReformat(shouldReformat());
+    // BUG: will cause static import for all statements including those within $expr$
+    template.setValue(Template.Property.USE_STATIC_IMPORT_IF_POSSIBLE, shouldUseStaticImportIfPossible(project));
+    return template;
+  }
+
+  /**
+   * Whether to override the default settings and use static import if possible.
+   *
+   * @param project The current project
+   */
+  protected boolean shouldUseStaticImportIfPossible(Project project) {
     return GuavaPostfixProjectSettings.getInstance(project).isUseStaticImportIfPossible();
   }
 

@@ -1,4 +1,4 @@
-package uk.co.drache.intellij.codeinsight.postfix.templates;
+package uk.co.drache.intellij.codeinsight.postfix.templates.utils;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
@@ -50,7 +50,7 @@ public class JvmCodeStubs {
    *
    * @param classToStub The class to stub
    */
-  static String getStubForTopLevelClass(Class<?> classToStub) {
+  public static String getStubForTopLevelClass(Class<?> classToStub) {
     return "package " + classToStub.getPackage().getName() + ";\n" + getStubForClass(classToStub);
   }
 

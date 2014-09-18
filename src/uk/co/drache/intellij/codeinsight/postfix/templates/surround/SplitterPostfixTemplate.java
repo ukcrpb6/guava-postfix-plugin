@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.co.drache.intellij.codeinsight.postfix.templates;
+package uk.co.drache.intellij.codeinsight.postfix.templates.surround;
 
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.impl.TextExpression;
@@ -22,7 +22,7 @@ import com.intellij.psi.PsiElement;
 
 import org.jetbrains.annotations.NotNull;
 
-import uk.co.drache.intellij.codeinsight.postfix.internal.StringBasedJavaPostfixTemplateWithChooser;
+import uk.co.drache.intellij.codeinsight.postfix.internal.RichChooserStringBasedPostfixTemplate;
 
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.SPLITTER;
@@ -33,7 +33,7 @@ import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTempla
  *
  * @author Bob Browning
  */
-public class SplitterPostfixTemplate extends StringBasedJavaPostfixTemplateWithChooser {
+public class SplitterPostfixTemplate extends RichChooserStringBasedPostfixTemplate {
 
   public SplitterPostfixTemplate() {
     super("split", "Splitter.on(',').split(sequence)", JAVA_PSI_INFO, IS_CHAR_SEQUENCE);
@@ -46,7 +46,7 @@ public class SplitterPostfixTemplate extends StringBasedJavaPostfixTemplateWithC
 
   @Override
   public final String getTemplateString(@NotNull PsiElement element) {
-    return getStaticMethodPrefix(SPLITTER, "on", element) + "($on$).split($expr$)$EOS$";
+    return getStaticMethodPrefix(SPLITTER, "on", element) + "($on$).split($expr$)$END$";
   }
 
   @Override

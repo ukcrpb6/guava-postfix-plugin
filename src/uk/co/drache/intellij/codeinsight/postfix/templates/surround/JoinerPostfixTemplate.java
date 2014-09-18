@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.co.drache.intellij.codeinsight.postfix.templates;
+package uk.co.drache.intellij.codeinsight.postfix.templates.surround;
 
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.impl.TextExpression;
@@ -23,7 +23,7 @@ import com.intellij.psi.PsiElement;
 
 import org.jetbrains.annotations.NotNull;
 
-import uk.co.drache.intellij.codeinsight.postfix.internal.StringBasedJavaPostfixTemplateWithChooser;
+import uk.co.drache.intellij.codeinsight.postfix.internal.RichChooserStringBasedPostfixTemplate;
 
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.JOINER;
@@ -35,7 +35,7 @@ import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTempla
  *
  * @author Bob Browning
  */
-public class JoinerPostfixTemplate extends StringBasedJavaPostfixTemplateWithChooser {
+public class JoinerPostfixTemplate extends RichChooserStringBasedPostfixTemplate {
 
   public JoinerPostfixTemplate() {
     super("join", "Joiner.on(',').join(parts)", JAVA_PSI_INFO, Conditions.or(IS_ARRAY_OR_ITERABLE_OR_ITERATOR, IS_MAP));
@@ -55,9 +55,9 @@ public class JoinerPostfixTemplate extends StringBasedJavaPostfixTemplateWithCho
   public final String getTemplateString(@NotNull PsiElement element) {
     if (isMap(element)) {
       return getStaticMethodPrefix(JOINER, "on", element)
-             + "($on$).withKeyValueSeparator($separator$).join($expr$)$EOS$";
+             + "($on$).withKeyValueSeparator($separator$).join($expr$)$END$";
     } else {
-      return getStaticMethodPrefix(JOINER, "on", element) + "($on$).join($expr$)$EOS$";
+      return getStaticMethodPrefix(JOINER, "on", element) + "($on$).join($expr$)$END$";
     }
   }
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.co.drache.intellij.codeinsight.postfix.templates;
+package uk.co.drache.intellij.codeinsight.postfix.templates.surround;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
@@ -22,7 +22,7 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import uk.co.drache.intellij.codeinsight.postfix.internal.StringBasedJavaPostfixTemplateWithChooser;
+import uk.co.drache.intellij.codeinsight.postfix.internal.RichChooserStringBasedPostfixTemplate;
 import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName;
 
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
@@ -32,7 +32,7 @@ import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplate
  *
  * @author Bob Browning
  */
-public abstract class ImmutableBasePostfixTemplate extends StringBasedJavaPostfixTemplateWithChooser {
+public abstract class ImmutableBasePostfixTemplate extends RichChooserStringBasedPostfixTemplate {
 
   private final GuavaClassName className;
   private final String methodName;
@@ -49,7 +49,7 @@ public abstract class ImmutableBasePostfixTemplate extends StringBasedJavaPostfi
   @Nullable
   @Override
   public String getTemplateString(@NotNull PsiElement element) {
-    return getStaticMethodPrefix(className, methodName, element) + "($expr$)$EOS$";
+    return getStaticMethodPrefix(className, methodName, element) + "($expr$)$END$";
   }
 
 

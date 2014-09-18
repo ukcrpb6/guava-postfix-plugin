@@ -20,7 +20,7 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import uk.co.drache.intellij.codeinsight.postfix.internal.RichStringBasedPostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.internal.RichTopmostStringBasedPostfixTemplate;
 
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_BOOLEAN;
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
@@ -31,7 +31,7 @@ import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.PRE
  *
  * @author Bob Browning
  */
-public class CheckArgumentPostfixTemplate extends RichStringBasedPostfixTemplate {
+public class CheckArgumentPostfixTemplate extends RichTopmostStringBasedPostfixTemplate {
 
   public CheckArgumentPostfixTemplate() {
     super("checkArgument", "Preconditions.checkArgument(expr)", JAVA_PSI_INFO, IS_BOOLEAN);

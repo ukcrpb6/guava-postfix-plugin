@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.co.drache.intellij.codeinsight.postfix.templates;
+package uk.co.drache.intellij.codeinsight.postfix.templates.surround;
+
+import uk.co.drache.intellij.codeinsight.postfix.templates.BasePostfixTemplateTest;
 
 /**
  * @author Bob Browning
  */
-public class ImmutableListOfPostfixTemplateTest extends BasePostfixTemplateTest {
+public class ImmutableListCopyOfPostfixTemplateTest extends BasePostfixTemplateTest {
 
-  public ImmutableListOfPostfixTemplateTest() {
-    super("testData/templates/immutablelistof");
+  public ImmutableListCopyOfPostfixTemplateTest() {
+    super("testData/templates/immutablelistcopyof");
   }
+
 }

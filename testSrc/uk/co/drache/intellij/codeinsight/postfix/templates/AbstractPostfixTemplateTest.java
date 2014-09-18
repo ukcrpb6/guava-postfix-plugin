@@ -25,6 +25,8 @@ import com.google.common.reflect.TypeToken;
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplate;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 
+import uk.co.drache.intellij.codeinsight.postfix.templates.utils.JvmCodeStubs;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,14 +65,14 @@ abstract public class AbstractPostfixTemplateTest extends LightCodeInsightFixtur
     // Add stub classes to mock JVM
     for (Class<?> aClass : classes) {
       myFixture.addClass(JvmCodeStubs.getStubForTopLevelClass(aClass));
-      myFixture.addClass(
-          "package javax.annotation;\n"
-          + "public @interface Nullable {}"
-      );
-      myFixture.addClass(
-          "package javax.annotation;\n"
-          + "public @interface Nonnull {}"
-      );
     }
+    myFixture.addClass(
+        "package javax.annotation;\n"
+        + "public @interface Nullable {}"
+    );
+    myFixture.addClass(
+        "package javax.annotation;\n"
+        + "public @interface Nonnull {}"
+    );
   }
 }
