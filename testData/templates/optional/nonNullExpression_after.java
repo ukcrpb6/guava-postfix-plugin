@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 class Simple {
 
-  public void method(@Nullable String arg) {
-      Optional.fromNullable(arg)<caret>;
+  public void method(@Nonnull String arg) {
+      Optional.of(arg)<caret>;
   }
 }

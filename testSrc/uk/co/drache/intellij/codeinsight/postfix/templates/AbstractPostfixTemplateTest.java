@@ -16,6 +16,7 @@
 package uk.co.drache.intellij.codeinsight.postfix.templates;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
@@ -56,6 +57,7 @@ abstract public class AbstractPostfixTemplateTest extends LightCodeInsightFixtur
         Iterable.class,
         Joiner.class,
         List.class,
+        Optional.class,
         Preconditions.class,
         Splitter.class,
         String.class,
