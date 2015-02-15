@@ -86,7 +86,7 @@ public abstract class RichTopmostStringBasedPostfixTemplate extends PostfixTempl
   }
 
   protected boolean shouldRemoveParent() {
-    return false;
+    return true;
   }
 
   public Template createTemplate(Project project, TemplateManager manager, String templateString) {
