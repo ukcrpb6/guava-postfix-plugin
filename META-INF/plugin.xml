@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>uk.co.drache.intellij.guavaPostfixCompletion</id>
   <name>Guava Postfix Completion</name>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
   <vendor email="rob@drache.co.uk" url="https://github.com/ukcrpb6/guava-postfix-plugin">Bob Browning</vendor>
 
   <description><![CDATA[
@@ -69,10 +69,11 @@
   <change-notes><![CDATA[
       * Initial release
       * Updated to support IDEA 14.0
+      * Updated to support IDEA 14.1
   ]]></change-notes>
 
   <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
-  <idea-version since-build="139.1117"/>
+  <idea-version since-build="140.2285"/>
 
   <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
        on how to target different products -->
