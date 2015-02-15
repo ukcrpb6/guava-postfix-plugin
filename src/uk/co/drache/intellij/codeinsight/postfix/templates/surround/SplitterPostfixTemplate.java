@@ -24,7 +24,6 @@ import org.jetbrains.annotations.NotNull;
 
 import uk.co.drache.intellij.codeinsight.postfix.internal.RichChooserStringBasedPostfixTemplate;
 
-import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.SPLITTER;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.IS_CHAR_SEQUENCE;
 
@@ -36,7 +35,7 @@ import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTempla
 public class SplitterPostfixTemplate extends RichChooserStringBasedPostfixTemplate {
 
   public SplitterPostfixTemplate() {
-    super("split", "Splitter.on(',').split(sequence)", JAVA_PSI_INFO, IS_CHAR_SEQUENCE);
+    super("split", "Splitter.on(',').split(sequence)", IS_CHAR_SEQUENCE);
   }
 
   @Override

@@ -22,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 import uk.co.drache.intellij.codeinsight.postfix.internal.RichTopmostStringBasedPostfixTemplate;
 
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_BOOLEAN;
-import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.PRECONDITIONS;
 
 /**
@@ -33,7 +32,7 @@ import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.PRE
 public class CheckStatePostfixTemplate extends RichTopmostStringBasedPostfixTemplate {
 
   public CheckStatePostfixTemplate() {
-    super("checkState", "Preconditions.checkState(expression)", JAVA_PSI_INFO, IS_BOOLEAN);
+    super("checkState", "Preconditions.checkState(expression)", IS_BOOLEAN);
   }
 
   @Override

@@ -25,8 +25,6 @@ import org.jetbrains.annotations.Nullable;
 import uk.co.drache.intellij.codeinsight.postfix.internal.RichChooserStringBasedPostfixTemplate;
 import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName;
 
-import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
-
 /**
  * Postfix template for guava immutable .copyOf and .of methods.
  *
@@ -41,7 +39,7 @@ public abstract class ImmutableBasePostfixTemplate extends RichChooserStringBase
                                          @NotNull GuavaClassName className,
                                          @NotNull String methodName,
                                          @NotNull Condition<PsiElement> typeChecker) {
-    super(key, example, JAVA_PSI_INFO, typeChecker);
+    super(key, example, typeChecker);
     this.className = className;
     this.methodName = methodName;
   }

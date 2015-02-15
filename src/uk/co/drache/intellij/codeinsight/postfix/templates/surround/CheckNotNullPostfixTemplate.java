@@ -23,7 +23,6 @@ import org.jetbrains.annotations.NotNull;
 import uk.co.drache.intellij.codeinsight.postfix.internal.RichChooserStringBasedPostfixTemplate;
 
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_NOT_PRIMITIVE;
-import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.PRECONDITIONS;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.isAnnotatedNullable;
 
@@ -46,7 +45,7 @@ public class CheckNotNullPostfixTemplate extends RichChooserStringBasedPostfixTe
   }
 
   public CheckNotNullPostfixTemplate(@NotNull String alias) {
-    super(alias, "Preconditions.checkNotNull(expr)", JAVA_PSI_INFO, IS_NON_NULL_OBJECT);
+    super(alias, "Preconditions.checkNotNull(expr)", IS_NON_NULL_OBJECT);
   }
 
   @Override

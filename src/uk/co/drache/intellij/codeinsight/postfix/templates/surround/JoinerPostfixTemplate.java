@@ -25,7 +25,6 @@ import org.jetbrains.annotations.NotNull;
 
 import uk.co.drache.intellij.codeinsight.postfix.internal.RichChooserStringBasedPostfixTemplate;
 
-import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.JOINER;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.IS_ARRAY_OR_ITERABLE_OR_ITERATOR;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.IS_MAP;
@@ -38,7 +37,7 @@ import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTempla
 public class JoinerPostfixTemplate extends RichChooserStringBasedPostfixTemplate {
 
   public JoinerPostfixTemplate() {
-    super("join", "Joiner.on(',').join(parts)", JAVA_PSI_INFO, Conditions.or(IS_ARRAY_OR_ITERABLE_OR_ITERATOR, IS_MAP));
+    super("join", "Joiner.on(',').join(parts)", Conditions.or(IS_ARRAY_OR_ITERABLE_OR_ITERATOR, IS_MAP));
   }
 
   @Override

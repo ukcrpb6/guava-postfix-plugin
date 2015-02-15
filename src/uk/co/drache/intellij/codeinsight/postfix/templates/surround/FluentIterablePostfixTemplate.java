@@ -24,7 +24,6 @@ import org.jetbrains.annotations.Nullable;
 
 import uk.co.drache.intellij.codeinsight.postfix.internal.RichChooserStringBasedPostfixTemplate;
 
-import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.FLUENT_ITERABLE;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.IS_ITERABLE;
 
@@ -39,7 +38,7 @@ public class FluentIterablePostfixTemplate extends RichChooserStringBasedPostfix
   private static final String FQ_METHOD_FROM = FLUENT_ITERABLE.getQualifiedStaticMethodName("from");
 
   public FluentIterablePostfixTemplate() {
-    super("fluentIterable", "FluentIterable.from(iterable)", JAVA_PSI_INFO, IS_ITERABLE);
+    super("fluentIterable", "FluentIterable.from(iterable)", IS_ITERABLE);
   }
 
   @Nullable

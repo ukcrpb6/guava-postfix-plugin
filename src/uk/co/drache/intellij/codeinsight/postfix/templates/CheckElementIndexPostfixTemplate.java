@@ -26,7 +26,6 @@ import org.jetbrains.annotations.NotNull;
 import uk.co.drache.intellij.codeinsight.postfix.internal.RichTopmostStringBasedPostfixTemplate;
 
 import static com.intellij.codeInsight.template.postfix.templates.ForIndexedPostfixTemplate.IS_NUMBER_OR_ARRAY_OR_ITERABLE;
-import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.PRECONDITIONS;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.getExpressionNumberOrArrayOrIterableBound;
 
@@ -41,7 +40,7 @@ public class CheckElementIndexPostfixTemplate extends RichTopmostStringBasedPost
   private static final String EXAMPLE = "Preconditions.checkElementIndex(index, size)";
 
   public CheckElementIndexPostfixTemplate() {
-    super("checkElementIndex", EXAMPLE, JAVA_PSI_INFO, IS_NUMBER_OR_ARRAY_OR_ITERABLE);
+    super("checkElementIndex", EXAMPLE, IS_NUMBER_OR_ARRAY_OR_ITERABLE);
   }
 
   @Override
