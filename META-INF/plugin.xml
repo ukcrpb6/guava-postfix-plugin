@@ -68,10 +68,11 @@
 
   <change-notes><![CDATA[
       * Initial release
+      * Updated to support IDEA 14.0
   ]]></change-notes>
 
   <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
-  <idea-version since-build="134.1172"/>
+  <idea-version since-build="139.1117"/>
 
   <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
        on how to target different products -->
