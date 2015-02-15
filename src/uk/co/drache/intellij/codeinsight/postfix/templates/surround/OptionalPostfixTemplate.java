@@ -24,8 +24,10 @@ import org.jetbrains.annotations.Nullable;
 import uk.co.drache.intellij.codeinsight.postfix.internal.RichChooserStringBasedPostfixTemplate;
 
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_NON_VOID;
+import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_NOT_PRIMITIVE;
 import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.OPTIONAL;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.IS_NON_PRIMITIVE_ARRAY_OR_ITERABLE_OR_ITERATOR;
 import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.isAnnotatedNullable;
 
 /**
@@ -40,7 +42,7 @@ public class OptionalPostfixTemplate extends RichChooserStringBasedPostfixTempla
   }
 
   public OptionalPostfixTemplate(String key) {
-    super(key, "Optional.of(Object)", JAVA_PSI_INFO, IS_NON_VOID);
+    super(key, "Optional.of(Object)", JAVA_PSI_INFO, IS_NOT_PRIMITIVE);
   }
 
   @Nullable
