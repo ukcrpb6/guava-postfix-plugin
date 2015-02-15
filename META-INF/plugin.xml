@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>uk.co.drache.intellij.guavaPostfixCompletion</id>
   <name>Guava Postfix Completion</name>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
   <vendor email="rob@drache.co.uk" url="https://github.com/ukcrpb6/guava-postfix-plugin">Bob Browning</vendor>
 
   <description><![CDATA[
