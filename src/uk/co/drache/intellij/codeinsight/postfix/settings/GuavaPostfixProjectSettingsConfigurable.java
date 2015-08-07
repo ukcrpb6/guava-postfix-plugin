@@ -1,43 +1,55 @@
-/*
- * Copyright (C) 2014 Bob Browning
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package uk.co.drache.intellij.codeinsight.postfix.settings;
+
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.openapi.project.Project;
 
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 import javax.swing.*;
 
 /**
- * Configurable project settings for plugin.
+ * Settings panel for plugin.
  *
  * @author Bob Browning
  */
-public class GuavaPostfixProjectSettingsConfigurable implements Configurable {
+public class GuavaPostfixProjectSettingsConfigurable
+    implements SearchableConfigurable,
+               Configurable.NoScroll {
 
-  private JComponent component;
-  private GuavaPostfixProjectSettingsPanel panel;
+  private final GuavaPostfixProjectSettings settings;
 
-  public GuavaPostfixProjectSettingsConfigurable(@NotNull Project project) {
-    panel = new GuavaPostfixProjectSettingsPanel(project);
-    component = panel.getPanel();
+  private JCheckBox useStaticImportIfPossible;
+
+  private JPanel panel;
+
+  private JPanel checkNotNullPanel;
+
+  private MessageEntryPanel checkNotNullMessageEntryPanel;
+
+  public GuavaPostfixProjectSettingsConfigurable(@NotNull final Project project) {
+    this.settings = GuavaPostfixProjectSettings.getInstance(project);
+  }
+
+  /**
+   * Set a {@link JCheckBox} form component state.
+   *
+   * @param box   The checkbox
+   * @param value The new state
+   */
+  private static void setValue(final JCheckBox box, final boolean value) {
+    box.setSelected(value);
   }
 
   @Nls
@@ -55,27 +67,76 @@ public class GuavaPostfixProjectSettingsConfigurable implements Configurable {
   @Nullable
   @Override
   public JComponent createComponent() {
-    return component;
+    checkNotNullMessageEntryPanel = new MessageEntryPanel();
+    checkNotNullPanel.add(checkNotNullMessageEntryPanel.getComponent());
+    return panel;
   }
 
   @Override
   public boolean isModified() {
-    return panel.isModified();
+    return settings.isUseStaticImportIfPossible() != useStaticImportIfPossible.isSelected()
+           || settings.isSuggestMessageForCheckNotNull() != checkNotNullMessageEntryPanel.isSelected()
+           || !Iterables.elementsEqual(getMessageEntryValuesFrom(checkNotNullMessageEntryPanel.getItems()),
+                                       settings.getSuggestionMessagesForCheckNotNull());
   }
 
   @Override
   public void apply() throws ConfigurationException {
-    panel.apply();
+    if (!isModified()) {
+      return;
+    }
+
+    settings.setUseStaticImportIfPossible(useStaticImportIfPossible.isSelected());
+    settings.setSuggestMessageForCheckNotNull(checkNotNullMessageEntryPanel.isSelected());
+
+    settings.setSuggestionMessagesForCheckNotNull(getMessageEntryValuesFrom(checkNotNullMessageEntryPanel.getItems()));
   }
 
   @Override
   public void reset() {
-    panel.reset();
+    setValue(useStaticImportIfPossible, settings.isUseStaticImportIfPossible());
+
+    resetCheckNotNullMessageTable();
+  }
+
+  private void resetCheckNotNullMessageTable() {
+    checkNotNullMessageEntryPanel.setSelected(settings.isSuggestMessageForCheckNotNull());
+    ImmutableList<MessageEntry> messageEntries = FluentIterable.from(settings.getSuggestionMessagesForCheckNotNull())
+        .transform(new Function<String, MessageEntry>() {
+          @Override
+          public MessageEntry apply(String s) {
+            return new MutableMessageEntry(s);
+          }
+        }).toList();
+
+    checkNotNullMessageEntryPanel.setItems(Lists.newArrayList(messageEntries));
   }
 
   @Override
   public void disposeUIResources() {
-    panel = null;
-    component = null;
+    checkNotNullMessageEntryPanel.dispose();
+    checkNotNullMessageEntryPanel = null;
+  }
+
+  private ImmutableList<String> getMessageEntryValuesFrom(List<MessageEntry> model) {
+    return FluentIterable.from(model).transform(
+        new Function<MessageEntry, String>() {
+          @Override
+          public String apply(MessageEntry messageEntry) {
+            return messageEntry.getText();
+          }
+        }).toList();
+  }
+
+  @NotNull
+  @Override
+  public String getId() {
+    return "postfix.templates.guava";
+  }
+
+  @Nullable
+  @Override
+  public Runnable enableSearch(String s) {
+    return null;
   }
 }

@@ -15,6 +15,8 @@
  */
 package uk.co.drache.intellij.codeinsight.postfix.settings;
 
+import com.google.common.collect.Lists;
+
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.components.ExportableComponent;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -29,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Project settings for the plugin.
@@ -52,6 +55,10 @@ public class GuavaPostfixProjectSettings
   }
 
   private boolean useStaticImportIfPossible = true;
+
+  private boolean suggestMessageForCheckNotNull = false;
+
+  private List<String> suggestionMessagesForCheckNotNull = Lists.newArrayList();
 
   @NotNull
   @Override
@@ -94,4 +101,27 @@ public class GuavaPostfixProjectSettings
     this.useStaticImportIfPossible = newValue;
   }
 
+  /**
+   * Whether message suggestion should be used for nullity check. Defaults to false.
+   */
+  public boolean isSuggestMessageForCheckNotNull() {
+    return suggestMessageForCheckNotNull;
+  }
+
+  /**
+   * Sets whether message suggestion should be used for nullity check. Defaults to false.
+   *
+   * @param newValue The new setting
+   */
+  public void setSuggestMessageForCheckNotNull(boolean newValue) {
+    this.suggestMessageForCheckNotNull = newValue;
+  }
+
+  public List<String> getSuggestionMessagesForCheckNotNull() {
+    return suggestionMessagesForCheckNotNull;
+  }
+
+  public void setSuggestionMessagesForCheckNotNull(List<String> messages) {
+    this.suggestionMessagesForCheckNotNull = Lists.newArrayList(messages);
+  }
 }
