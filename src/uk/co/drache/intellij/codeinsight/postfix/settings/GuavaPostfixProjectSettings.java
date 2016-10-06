@@ -26,12 +26,13 @@ import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StorageScheme;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Project settings for the plugin.
@@ -56,7 +57,9 @@ public class GuavaPostfixProjectSettings
 
   private boolean useStaticImportIfPossible = true;
 
-  private boolean suggestMessageForCheckNotNull = false;
+  private boolean suggestMessageForCheckNotNull;
+
+  private boolean suggestNoPrefixForCheckNotNull = true;
 
   private List<String> suggestionMessagesForCheckNotNull = Lists.newArrayList();
 
@@ -80,25 +83,11 @@ public class GuavaPostfixProjectSettings
     return this;
   }
 
-  @Override
-  public void loadState(GuavaPostfixProjectSettings state) {
-    XmlSerializerUtil.copyBean(state, this);
-  }
-
   /**
    * Whether static import should be used if possible. Defaults to true.
    */
   public boolean isUseStaticImportIfPossible() {
     return useStaticImportIfPossible;
-  }
-
-  /**
-   * Set whether static import should be used if possible. Defaults to true.
-   *
-   * @param newValue The new setting
-   */
-  public void setUseStaticImportIfPossible(boolean newValue) {
-    this.useStaticImportIfPossible = newValue;
   }
 
   /**
@@ -109,19 +98,62 @@ public class GuavaPostfixProjectSettings
   }
 
   /**
+   * Whether no prefix option should be provided.
+   *
+   * @return true if no prefix option should be provided
+   */
+  public boolean isSuggestNoPrefixForCheckNotNull() {
+    return suggestNoPrefixForCheckNotNull;
+  }
+
+  @Override
+  public void loadState(GuavaPostfixProjectSettings state) {
+    XmlSerializerUtil.copyBean(state, this);
+  }
+
+  /**
+   * Message suggestions.
+   *
+   * @return list of message suggestions
+   */
+  public List<String> getSuggestionMessagesForCheckNotNull() {
+    return suggestionMessagesForCheckNotNull;
+  }
+
+  /**
    * Sets whether message suggestion should be used for nullity check. Defaults to false.
    *
    * @param newValue The new setting
    */
   public void setSuggestMessageForCheckNotNull(boolean newValue) {
-    this.suggestMessageForCheckNotNull = newValue;
+    suggestMessageForCheckNotNull = newValue;
   }
 
-  public List<String> getSuggestionMessagesForCheckNotNull() {
-    return suggestionMessagesForCheckNotNull;
+  /**
+   * Set whether no prefix option should be provided.
+   *
+   * @param suggestNoPrefixForCheckNotNull true if no prefix option
+   */
+  public void setSuggestNoPrefixForCheckNotNull(boolean suggestNoPrefixForCheckNotNull) {
+    this.suggestNoPrefixForCheckNotNull = suggestNoPrefixForCheckNotNull;
   }
 
+  /**
+   * Set message sugestions.
+   *
+   * @param messages new list of message suggestions
+   */
   public void setSuggestionMessagesForCheckNotNull(List<String> messages) {
-    this.suggestionMessagesForCheckNotNull = Lists.newArrayList(messages);
+    checkNotNull(messages, "messages must not be null");
+    suggestionMessagesForCheckNotNull = Lists.newArrayList(messages);
+  }
+
+  /**
+   * Set whether static import should be used if possible. Defaults to true.
+   *
+   * @param newValue The new setting
+   */
+  public void setUseStaticImportIfPossible(boolean newValue) {
+    useStaticImportIfPossible = newValue;
   }
 }
