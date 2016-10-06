@@ -18,9 +18,7 @@ package uk.co.drache.intellij.codeinsight.postfix;
 import com.intellij.codeInsight.template.postfix.templates.JavaPostfixTemplateProvider;
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplate;
 import com.intellij.util.containers.ContainerUtil;
-
 import org.jetbrains.annotations.NotNull;
-
 import uk.co.drache.intellij.codeinsight.postfix.templates.CheckArgumentPostfixTemplate;
 import uk.co.drache.intellij.codeinsight.postfix.templates.CheckElementIndexPostfixTemplate;
 import uk.co.drache.intellij.codeinsight.postfix.templates.CheckPositionIndexPostfixTemplate;
@@ -34,6 +32,7 @@ import uk.co.drache.intellij.codeinsight.postfix.templates.surround.ImmutableSet
 import uk.co.drache.intellij.codeinsight.postfix.templates.surround.ImmutableSetOfPostfixTemplate;
 import uk.co.drache.intellij.codeinsight.postfix.templates.surround.JoinerPostfixTemplate;
 import uk.co.drache.intellij.codeinsight.postfix.templates.surround.OptionalPostfixTemplate;
+import uk.co.drache.intellij.codeinsight.postfix.templates.surround.RequireNonNullPostfixTemplate;
 import uk.co.drache.intellij.codeinsight.postfix.templates.surround.SplitterPostfixTemplate;
 
 import java.util.HashSet;
@@ -64,7 +63,10 @@ public class GuavaPostfixTemplateProvider extends JavaPostfixTemplateProvider {
         new ImmutableSetOfPostfixTemplate(),
         new JoinerPostfixTemplate(),
         new SplitterPostfixTemplate(),
-        new OptionalPostfixTemplate()
+        new OptionalPostfixTemplate(),
+        // java 7+
+        new RequireNonNullPostfixTemplate(),
+        new RequireNonNullPostfixTemplate("rnn")
     );
   }
 

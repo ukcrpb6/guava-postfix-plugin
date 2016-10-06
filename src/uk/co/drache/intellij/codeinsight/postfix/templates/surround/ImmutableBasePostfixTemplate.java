@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import uk.co.drache.intellij.codeinsight.postfix.internal.RichChooserStringBasedPostfixTemplate;
-import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName;
+import uk.co.drache.intellij.codeinsight.postfix.utils.ClassName;
 
 /**
  * Postfix template for guava immutable .copyOf and .of methods.
@@ -32,11 +32,11 @@ import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName;
  */
 public abstract class ImmutableBasePostfixTemplate extends RichChooserStringBasedPostfixTemplate {
 
-  private final GuavaClassName className;
+  private final ClassName className;
   private final String methodName;
 
   protected ImmutableBasePostfixTemplate(@NotNull String key, @NotNull String example,
-                                         @NotNull GuavaClassName className,
+                                         @NotNull ClassName className,
                                          @NotNull String methodName,
                                          @NotNull Condition<PsiElement> typeChecker) {
     super(key, example, typeChecker);
@@ -49,7 +49,6 @@ public abstract class ImmutableBasePostfixTemplate extends RichChooserStringBase
   public String getTemplateString(@NotNull PsiElement element) {
     return getStaticMethodPrefix(className, methodName, element) + "($expr$)$END$";
   }
-
 
   @Override
   protected boolean shouldUseStaticImportIfPossible(@NotNull Project project) {

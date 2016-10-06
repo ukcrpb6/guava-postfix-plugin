@@ -25,7 +25,6 @@ import com.google.common.reflect.TypeToken;
 
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplate;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
-
 import uk.co.drache.intellij.codeinsight.postfix.templates.utils.JvmCodeStubs;
 
 import java.util.ArrayList;
@@ -68,6 +67,13 @@ abstract public class AbstractPostfixTemplateTest extends LightCodeInsightFixtur
     for (Class<?> aClass : classes) {
       myFixture.addClass(JvmCodeStubs.getStubForTopLevelClass(aClass));
     }
+
+    myFixture.addClass(
+        "package java.util;\n"
+        + "public class Objects {"
+        + "public static <T> T requireNonNull(T obj, String message) {}"
+        + "}"
+    );
     myFixture.addClass(
         "package javax.annotation;\n"
         + "public @interface Nullable {}"

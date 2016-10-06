@@ -20,54 +20,20 @@ import com.intellij.psi.PsiElement;
 import com.siyeh.ig.psiutils.ClassUtils;
 
 /**
- * Collection of static strings representing guava class names.
+ * Collection of static strings representing java class names.
  *
  * @author Bob Browning
  */
-public enum GuavaClassName implements ClassName {
-  /**
-   * {@link com.google.common.collect.FluentIterable}.
-   */
-  FLUENT_ITERABLE("com.google.common.collect.FluentIterable"),
+public enum JavaClassName implements ClassName {
 
   /**
-   * {@link com.google.common.collect.ImmutableList}.
+   * java.util.Objects.
    */
-  IMMUTABLE_LIST("com.google.common.collect.ImmutableList"),
-
-  /**
-   * {@link com.google.common.collect.ImmutableSet}.
-   */
-  IMMUTABLE_SET("com.google.common.collect.ImmutableSet"),
-
-  /**
-   * {@link com.google.common.collect.Iterables}.
-   */
-  ITERABLES("com.google.common.collect.Iterables"),
-
-  /**
-   * {@link com.google.common.base.Joiner}.
-   */
-  JOINER("com.google.common.base.Joiner"),
-
-  /**
-   * {@link com.google.common.base.Splitter}.
-   */
-  SPLITTER("com.google.common.base.Splitter"),
-
-  /**
-   * {@link com.google.common.base.Preconditions}.
-   */
-  PRECONDITIONS("com.google.common.base.Preconditions"),
-
-  /**
-   * {@link com.google.common.base.Optional}.
-   */
-  OPTIONAL("com.google.common.base.Optional");
+  OBJECTS("java.util.Objects");
 
   private final String fqClassName;
 
-  GuavaClassName(String fqClassName) {
+  JavaClassName(String fqClassName) {
     this.fqClassName = fqClassName;
   }
 

@@ -22,18 +22,16 @@ import com.intellij.codeInsight.template.postfix.templates.PostfixTemplateExpres
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplateWithExpressionSelector;
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplatesUtils;
 import com.intellij.codeInsight.template.postfix.templates.StringBasedPostfixTemplate;
-import com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElement;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import uk.co.drache.intellij.codeinsight.postfix.settings.GuavaPostfixProjectSettings;
-import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName;
+import uk.co.drache.intellij.codeinsight.postfix.utils.ClassName;
 import uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils;
 
 /**
@@ -136,7 +134,7 @@ public abstract class AbstractRichStringBasedPostfixTemplate extends PostfixTemp
    * @param methodName The method name
    * @param context    The context element
    */
-  protected String getStaticMethodPrefix(@NotNull GuavaClassName className,
+  protected String getStaticMethodPrefix(@NotNull ClassName className,
                                          @NotNull String methodName,
                                          @NotNull PsiElement context) {
     return getStaticMethodPrefix(className.getClassName(), methodName, context);
