@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>uk.co.drache.intellij.guavaPostfixCompletion</id>
   <name>Guava Postfix Completion</name>
-  <version>1.1.1</version>
+  <version>1.1.3</version>
   <vendor email="rob@drache.co.uk" url="https://github.com/ukcrpb6/guava-postfix-plugin">Bob Browning</vendor>
 
   <description><![CDATA[
@@ -64,12 +64,33 @@
       <ul>
         <li> <b>.optional</b><br/><em>Creates an optional around the element, if variable is annotated as @Nullable then .fromNullable will be used, .of otherwise</em><br/><b>Optional.of(Object)</b></li>
       </ul>
+
+      Postfix completion templates for java 7+
+
+      <b>Available templates:</b><br/><br/>
+
+      <ul>
+        <li> <b>.requireNonNull</b><br/><em>Requires that the value is not null</em><br/><b>requireNonNull(expr)</b></li>
+      </ul>
     ]]></description>
 
   <change-notes><![CDATA[
+      - 1.0
       * Initial release
+
+      - 1.1
       * Updated to support IDEA 14.0
+
+      - 1.1.1
       * Updated to support IDEA 14.1
+
+      - 1.1.2
+      * Added support for checkNotNull messages
+
+      - 1.1.3
+      * Improved checkNotNull message support by allowing no prefix to be excluded for faster completion
+      * Added support for Java 7 requireNonNull
+
   ]]></change-notes>
 
   <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
