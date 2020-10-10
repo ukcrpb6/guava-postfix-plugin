@@ -1,2 +1,4 @@
 guava-postfix-plugin.jar
 out/
+build/
+.gradle/

@@ -1,0 +1,7 @@
+import java.util.Objects;
+
+public class Foo {
+  void m(Object o) {
+      <spot>Objects.requireNonNull(o)</spot>
+  }
+}

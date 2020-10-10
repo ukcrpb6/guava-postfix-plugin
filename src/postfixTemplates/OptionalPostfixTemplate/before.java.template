@@ -1,5 +1,0 @@
-public class Foo {
-  void m(Object obj) {
-    <spot>obj</spot>$key
-  }
-}
