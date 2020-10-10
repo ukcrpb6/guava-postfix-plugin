@@ -15,21 +15,20 @@
  */
 package uk.co.drache.intellij.codeinsight.postfix.templates.guava;
 
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.PRECONDITIONS;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.IS_NUMBER_OR_ARRAY_OR_ITERABLE;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.getExpressionNumberOrArrayOrIterableBound;
+
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.impl.TextExpression;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
-
 import org.jetbrains.annotations.NotNull;
-
 import uk.co.drache.intellij.codeinsight.postfix.internal.RichTopmostStringBasedPostfixTemplate;
 
-import static com.intellij.codeInsight.template.postfix.templates.ForIndexedPostfixTemplate.IS_NUMBER_OR_ARRAY_OR_ITERABLE;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.PRECONDITIONS;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.getExpressionNumberOrArrayOrIterableBound;
-
 /**
- * Postfix template for guava {@code com.google.common.base.Preconditions#checkPositionIndex(int, int)}.
+ * Postfix template for guava {@code com.google.common.base.Preconditions#checkPositionIndex(int,
+ * int)}.
  *
  * @author Bob Browning
  */
@@ -58,12 +57,12 @@ public class CheckPositionIndexPostfixTemplate extends RichTopmostStringBasedPos
 
   @NotNull
   private String getStringTemplate(@NotNull PsiExpression expr) {
-    return getStaticMethodPrefix(PRECONDITIONS, "checkPositionIndex", expr) + "($index$, $bound$);$END$";
+    return getStaticMethodPrefix(PRECONDITIONS, "checkPositionIndex", expr)
+        + "($index$, $bound$);$END$";
   }
 
   @Override
   protected boolean shouldAddExpressionToContext() {
     return false;
   }
-
 }

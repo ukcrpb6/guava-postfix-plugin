@@ -47,6 +47,8 @@ import uk.co.drache.intellij.codeinsight.postfix.settings.GuavaPostfixProjectSet
 /** Postfix template for java 7 {@code java.util.requireNonNull(Object)}. */
 public class RequireNonNullPostfixTemplate extends RichChooserStringBasedPostfixTemplate {
 
+  // TODO: see com.intellij.codeInsight.template.postfix.templates.editable.JavaEditablePostfixTemplate
+
   private static final Condition<PsiElement> IS_NON_NULL_OBJECT =
       element -> IS_NOT_PRIMITIVE.value(element) && !isAnnotatedNullable(element);
 

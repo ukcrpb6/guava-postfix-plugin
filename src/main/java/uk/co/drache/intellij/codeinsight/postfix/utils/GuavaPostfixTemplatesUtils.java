@@ -57,22 +57,25 @@ public class GuavaPostfixTemplatesUtils {
 
   /** Condition that returns true if the element is an iterable. */
   public static final Condition<PsiElement> IS_ITERABLE =
-      element -> {
-        if (element instanceof PsiExpression) {
-          PsiType type = ((PsiExpression) element).getType();
-          return isIterable(type);
-        }
-        return false;
-      };
+      element ->
+          element instanceof PsiExpression && isIterable(((PsiExpression) element).getType());
 
   /** Condition that returns true if the element is an iterable or an iterator or an array. */
   public static final Condition<PsiElement> IS_ARRAY_OR_ITERABLE_OR_ITERATOR =
       element -> {
-        if (element instanceof PsiExpression) {
-          PsiType type = ((PsiExpression) element).getType();
-          return isIterator(type) || isArray(type) || isIterable(type);
-        }
-        return false;
+        if (!(element instanceof PsiExpression)) return false;
+
+        PsiType type = ((PsiExpression) element).getType();
+        return isIterator(type) || isArray(type) || isIterable(type);
+      };
+
+  /** Condition that returns true if the element is a number; iterable or an array. */
+  public static final Condition<PsiElement> IS_NUMBER_OR_ARRAY_OR_ITERABLE =
+      element -> {
+        if (!(element instanceof PsiExpression)) return false;
+
+        PsiType type = ((PsiExpression) element).getType();
+        return isNumber(type) || isArray(type) || isIterable(type);
       };
   /**
    * Condition that returns true if the element is an iterable or an iterator or an object array or
@@ -80,11 +83,10 @@ public class GuavaPostfixTemplatesUtils {
    */
   public static final Condition<PsiElement> IS_NON_PRIMITIVE_ARRAY_OR_ITERABLE_OR_ITERATOR =
       element -> {
-        if (element instanceof PsiExpression) {
-          PsiType type = ((PsiExpression) element).getType();
-          return isObjectArrayTypeExpression(type) || isIterable(type) || isIterator(type);
-        }
-        return false;
+        if (!(element instanceof PsiExpression)) return false;
+
+        PsiType type = ((PsiExpression) element).getType();
+        return isObjectArrayTypeExpression(type) || isIterable(type) || isIterator(type);
       };
 
   @NonNls private static final String JAVA_LANG_CHAR_SEQUENCE = "java.lang.CharSequence";

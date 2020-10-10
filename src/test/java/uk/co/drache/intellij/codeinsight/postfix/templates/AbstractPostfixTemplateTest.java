@@ -35,6 +35,7 @@ public abstract class AbstractPostfixTemplateTest extends LightJavaCodeInsightFi
   protected void setUp() throws Exception {
     super.setUp();
 
+    @SuppressWarnings("UnstableApiUsage")
     ImmutableList<Class<?>> classes =
         ImmutableList.of(
             ArrayList.class,

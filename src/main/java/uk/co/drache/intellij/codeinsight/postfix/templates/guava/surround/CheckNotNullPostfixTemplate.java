@@ -15,18 +15,19 @@
  */
 package uk.co.drache.intellij.codeinsight.postfix.templates.guava.surround;
 
-import com.google.common.base.Function;
+import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_NOT_PRIMITIVE;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.PRECONDITIONS;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.isAnnotatedNullable;
+
 import com.google.common.base.Strings;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.template.Expression;
 import com.intellij.codeInsight.template.ExpressionContext;
 import com.intellij.codeInsight.template.Result;
 import com.intellij.codeInsight.template.Template;
+import com.intellij.codeInsight.template.Template.Property;
 import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.codeInsight.template.TextResult;
 import com.intellij.codeInsight.template.impl.TextExpression;
@@ -34,28 +35,19 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceExpression;
+import java.util.LinkedList;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.co.drache.intellij.codeinsight.postfix.internal.RichChooserStringBasedPostfixTemplate;
 import uk.co.drache.intellij.codeinsight.postfix.settings.GuavaPostfixProjectSettings;
 
-import java.util.LinkedList;
-
-import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_NOT_PRIMITIVE;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.PRECONDITIONS;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.isAnnotatedNullable;
-
-/**
- * Postfix template for guava {@code com.google.common.base.Preconditions#checkNotNull(Object)}.
- */
+/** Postfix template for guava {@code com.google.common.base.Preconditions#checkNotNull(Object)}. */
 public class CheckNotNullPostfixTemplate extends RichChooserStringBasedPostfixTemplate {
 
-  private static final Condition<PsiElement> IS_NON_NULL_OBJECT = new Condition<PsiElement>() {
-    @Override
-    public boolean value(PsiElement element) {
-      return IS_NOT_PRIMITIVE.value(element) && !isAnnotatedNullable(element);
-    }
-  };
+  private static final Condition<PsiElement> IS_NON_NULL_OBJECT =
+      element -> IS_NOT_PRIMITIVE.value(element) && !isAnnotatedNullable(element);
 
   public CheckNotNullPostfixTemplate() {
     this("checkNotNull");
@@ -68,14 +60,16 @@ public class CheckNotNullPostfixTemplate extends RichChooserStringBasedPostfixTe
   /**
    * Create a new instance of a code template for the current postfix template.
    *
-   * @param project        The current project
-   * @param manager        The template manager
+   * @param project The current project
+   * @param manager The template manager
    * @param templateString The template string
    */
-  protected Template createTemplate(Project project, TemplateManager manager, String templateString) {
+  protected Template createTemplate(
+      Project project, TemplateManager manager, String templateString) {
     Template template = manager.createTemplate("", "", templateString);
     template.setToReformat(shouldReformat());
-    template.setValue(Template.Property.USE_STATIC_IMPORT_IF_POSSIBLE, shouldUseStaticImportIfPossible(project));
+    template.setValue(
+        Property.USE_STATIC_IMPORT_IF_POSSIBLE, shouldUseStaticImportIfPossible(project));
 
     return template;
   }
@@ -83,7 +77,8 @@ public class CheckNotNullPostfixTemplate extends RichChooserStringBasedPostfixTe
   @Override
   public String getTemplateString(@NotNull PsiElement element) {
     if (isSuggestMessageForNullityCheck(element) && element instanceof PsiReferenceExpression) {
-      return getStaticMethodPrefix(PRECONDITIONS, "checkNotNull", element) + "($expr$, \"$var$\")$END$";
+      return getStaticMethodPrefix(PRECONDITIONS, "checkNotNull", element)
+          + "($expr$, \"$var$\")$END$";
     }
     return getStaticMethodPrefix(PRECONDITIONS, "checkNotNull", element) + "($expr$)$END$";
   }
@@ -99,48 +94,39 @@ public class CheckNotNullPostfixTemplate extends RichChooserStringBasedPostfixTe
       }
 
       // prepend expression text, create set to remove duplicates
-      ImmutableSet<String> strings = FluentIterable.from(lookupSuffixes)
-          .transform(new Function<String, String>() {
-            @Override
-            public String apply(String s) {
-              return Strings.isNullOrEmpty(s) ? exprText : exprText + " " + s;
-            }
-          }).toSet();
+      Set<String> strings =
+          lookupSuffixes.stream()
+              .map(s -> Strings.isNullOrEmpty(s) ? exprText : exprText + " " + s)
+              .collect(Collectors.toSet());
 
       Expression expr;
       if (strings.size() > 1) {
         // need to perform lookup expression
 
         // convert to lookup elements
-        final LookupElement[] lookupElements = FluentIterable.from(strings).
-            transform(new Function<String, LookupElement>() {
-              @Override
-              public LookupElement apply(String s) {
-                return lookupElement(s);
-              }
-            }).toArray(LookupElement.class);
+        final LookupElement[] lookupElements =
+            strings.stream().map(this::lookupElement).toArray(LookupElement[]::new);
 
         final TextResult result = new TextResult(exprText);
 
-        expr = new Expression() {
-          @Nullable
-          @Override
-          public Result calculateResult(ExpressionContext expressionContext) {
-            return result;
-          }
+        expr =
+            new Expression() {
+              @Override
+              public Result calculateResult(ExpressionContext expressionContext) {
+                return result;
+              }
 
-          @Nullable
-          @Override
-          public Result calculateQuickResult(ExpressionContext expressionContext) {
-            return result;
-          }
+              @Override
+              public Result calculateQuickResult(ExpressionContext expressionContext) {
+                return result;
+              }
 
-          @Nullable
-          @Override
-          public LookupElement[] calculateLookupItems(ExpressionContext expressionContext) {
-            return lookupElements;
-          }
-        };
+              @Nullable
+              @Override
+              public LookupElement[] calculateLookupItems(ExpressionContext expressionContext) {
+                return lookupElements;
+              }
+            };
       } else {
         // automatically use only message, or fallback to empty suffix if no messages present
         expr = new TextExpression(Iterables.getFirst(strings, ""));
@@ -151,7 +137,8 @@ public class CheckNotNullPostfixTemplate extends RichChooserStringBasedPostfixTe
   }
 
   private LinkedList<String> getLookupSuffixes(@NotNull PsiElement element) {
-    GuavaPostfixProjectSettings settings = GuavaPostfixProjectSettings.getInstance(element.getProject());
+    GuavaPostfixProjectSettings settings =
+        GuavaPostfixProjectSettings.getInstance(element.getProject());
     return Lists.newLinkedList(settings.getSuggestionMessagesForCheckNotNull());
   }
 

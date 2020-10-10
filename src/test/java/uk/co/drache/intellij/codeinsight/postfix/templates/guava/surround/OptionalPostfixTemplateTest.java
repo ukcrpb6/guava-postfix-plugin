@@ -28,11 +28,11 @@ public class OptionalPostfixTemplateTest extends BasePostfixTemplateTest {
     super("guava/optional");
   }
 
-  public void testNonNullExpression() throws Exception {
+  public void testNonNullExpression() {
     doTest();
   }
 
-  public void testNonAnnotatedExpression() throws Exception {
+  public void testNonAnnotatedExpression() {
     doTest();
   }
 }

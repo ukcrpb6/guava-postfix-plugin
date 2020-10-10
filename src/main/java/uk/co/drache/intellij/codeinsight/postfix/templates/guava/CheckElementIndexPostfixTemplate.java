@@ -15,29 +15,27 @@
  */
 package uk.co.drache.intellij.codeinsight.postfix.templates.guava;
 
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.PRECONDITIONS;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.IS_NUMBER_OR_ARRAY_OR_ITERABLE;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.getExpressionNumberOrArrayOrIterableBound;
+
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.impl.TextExpression;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
-
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-
 import uk.co.drache.intellij.codeinsight.postfix.internal.RichTopmostStringBasedPostfixTemplate;
 
-import static com.intellij.codeInsight.template.postfix.templates.ForIndexedPostfixTemplate.IS_NUMBER_OR_ARRAY_OR_ITERABLE;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.PRECONDITIONS;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.getExpressionNumberOrArrayOrIterableBound;
-
 /**
- * Postfix template for guava {@code com.google.common.base.Preconditions#checkElementIndex(int, int)}.
+ * Postfix template for guava {@code com.google.common.base.Preconditions#checkElementIndex(int,
+ * int)}.
  *
  * @author Bob Browning
  */
 public class CheckElementIndexPostfixTemplate extends RichTopmostStringBasedPostfixTemplate {
 
-  @NonNls
-  private static final String EXAMPLE = "Preconditions.checkElementIndex(index, size)";
+  @NonNls private static final String EXAMPLE = "Preconditions.checkElementIndex(index, size)";
 
   public CheckElementIndexPostfixTemplate() {
     super("checkElementIndex", EXAMPLE, IS_NUMBER_OR_ARRAY_OR_ITERABLE);
@@ -62,12 +60,12 @@ public class CheckElementIndexPostfixTemplate extends RichTopmostStringBasedPost
 
   @NotNull
   protected String getStringTemplate(@NotNull PsiElement context) {
-    return getStaticMethodPrefix(PRECONDITIONS, "checkElementIndex", context) + "($index$, $bound$);$END$";
+    return getStaticMethodPrefix(PRECONDITIONS, "checkElementIndex", context)
+        + "($index$, $bound$);$END$";
   }
 
   @Override
   protected boolean shouldAddExpressionToContext() {
     return false;
   }
-
 }

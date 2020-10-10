@@ -15,22 +15,21 @@
  */
 package uk.co.drache.intellij.codeinsight.postfix.templates.guava;
 
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.PRECONDITIONS;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.IS_NUMBER_OR_ARRAY_OR_ITERABLE;
+import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.getExpressionNumberOrArrayOrIterableBound;
+
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.impl.TextExpression;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
-
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-
 import uk.co.drache.intellij.codeinsight.postfix.internal.RichTopmostStringBasedPostfixTemplate;
 
-import static com.intellij.codeInsight.template.postfix.templates.ForIndexedPostfixTemplate.IS_NUMBER_OR_ARRAY_OR_ITERABLE;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaClassName.PRECONDITIONS;
-import static uk.co.drache.intellij.codeinsight.postfix.utils.GuavaPostfixTemplatesUtils.getExpressionNumberOrArrayOrIterableBound;
-
 /**
- * Postfix template for guava {@code com.google.common.base.Preconditions#checkPositionIndexes(int, int, int)}.
+ * Postfix template for guava {@code com.google.common.base.Preconditions#checkPositionIndexes(int,
+ * int, int)}.
  *
  * @author Bob Browning
  */
@@ -46,7 +45,8 @@ public class CheckPositionIndexesPostfixTemplate extends RichTopmostStringBasedP
   @Override
   public void setVariables(@NotNull Template template, @NotNull PsiElement element) {
     TextExpression start = new TextExpression("0");
-    TextExpression end = new TextExpression(getExpressionNumberOrArrayOrIterableBound((PsiExpression) element));
+    TextExpression end =
+        new TextExpression(getExpressionNumberOrArrayOrIterableBound((PsiExpression) element));
     template.addVariable("start", start, start, true);
     template.addVariable("end", end, end, true);
   }
@@ -64,12 +64,12 @@ public class CheckPositionIndexesPostfixTemplate extends RichTopmostStringBasedP
 
   @NotNull
   private String getStringTemplate(@NotNull PsiElement element) {
-    return getStaticMethodPrefix(PRECONDITIONS, "checkPositionIndexes", element) + "($start$, $end$, $bound$);$END$";
+    return getStaticMethodPrefix(PRECONDITIONS, "checkPositionIndexes", element)
+        + "($start$, $end$, $bound$);$END$";
   }
 
   @Override
   protected boolean shouldAddExpressionToContext() {
     return false;
   }
-
 }

@@ -1,12 +1,10 @@
 package uk.co.drache.intellij.codeinsight.postfix.templates.utils;
 
-import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
-
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.stream.Collectors;
 
 /**
  * Static utility class pertaining to stubbing of JVM classes.
@@ -15,11 +13,8 @@ import java.lang.reflect.Modifier;
  */
 public class JvmCodeStubs {
 
-  /**
-   * Prevent inheritance and instantiation.
-   */
-  private JvmCodeStubs() {
-  }
+  /** Prevent inheritance and instantiation. */
+  private JvmCodeStubs() {}
 
   /**
    * Create stub class signature.
@@ -28,7 +23,10 @@ public class JvmCodeStubs {
    */
   private static String getStubClassSignature(Class<?> classToStub) {
     if (classToStub.getTypeParameters().length > 0) {
-      return classToStub.getName() + "<" + Joiner.on(", ").join(classToStub.getTypeParameters()) + ">";
+      return classToStub.getName()
+          + "<"
+          + Joiner.on(", ").join(classToStub.getTypeParameters())
+          + ">";
     }
     return classToStub.getName();
   }
@@ -40,7 +38,10 @@ public class JvmCodeStubs {
    */
   private static String getSimpleStubClassSignature(Class<?> classToStub) {
     if (classToStub.getTypeParameters().length > 0) {
-      return classToStub.getSimpleName() + "<" + Joiner.on(", ").join(classToStub.getTypeParameters()) + ">";
+      return classToStub.getSimpleName()
+          + "<"
+          + Joiner.on(", ").join(classToStub.getTypeParameters())
+          + ">";
     }
     return classToStub.getSimpleName();
   }
@@ -73,16 +74,12 @@ public class JvmCodeStubs {
     Class<?>[] interfaces = classToStub.getInterfaces();
     if (interfaces.length > 0) {
       sb.append(" implements ");
-      sb.append(Joiner.on(", ").join(
-          Iterables.transform(ImmutableList.copyOf(interfaces),
-                              new Function<Class<?>, String>() {
-                                @Override
-                                public String apply(Class<?> aClass) {
-                                  return getStubClassSignature(aClass);
-                                }
-                              }
-          )
-      ));
+      sb.append(
+          Joiner.on(", ")
+              .join(
+                  ImmutableList.copyOf(interfaces).stream()
+                      .map(JvmCodeStubs::getStubClassSignature)
+                      .collect(Collectors.toList())));
     }
 
     sb.append(" {").append("\n");
@@ -97,7 +94,7 @@ public class JvmCodeStubs {
     for (Method method : classToStub.getDeclaredMethods()) {
       sb.append(getModifiersSignature(method.getModifiers()));
 
-      if (method.getReturnType() == null) {
+      if (method.getReturnType() == Void.TYPE) {
         sb.append("void");
       } else {
         sb.append(getStubClassSignature(method.getReturnType()));
