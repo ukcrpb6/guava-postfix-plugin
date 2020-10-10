@@ -112,6 +112,13 @@
             <li>Added support for Java 7 requireNonNull</li>
           </ul>
         </li>
+
+        <li>1.2.0
+          <ul>
+            <li>Updated to gradle build system</li>
+            <li>Fixed deprecations to support 202.*</li>
+          </ul>
+        </li>
       </ul>
   ]]></change-notes>
 
