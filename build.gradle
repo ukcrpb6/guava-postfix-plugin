@@ -25,3 +25,7 @@ patchPluginXml {
     version = project.version
     sinceBuild = '181.3741.2'
 }
+
+publishPlugin {
+    token System.getenv('ORG_GRADLE_PROJECT_intellijPublishToken')
+}
